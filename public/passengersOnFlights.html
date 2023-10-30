@@ -50,10 +50,14 @@
 
     </table>
     <form>
-        <label for="flightNumber">Flight Number</label><br>
-        <input type="text" id="flightNumber" name="flightNumber"><br>
-        <label for="passengerID">Passenger ID</label><br>
-        <input type="text" id="passengerID" name="passengerID"><br>
+        Flight: <select name="flight" id="flight">
+            <option value="flight" selected="flight">Select Flight</option>
+          </select>
+          <br>
+        Passenger: <select name="passenger" id="passenger">
+        <option value="passenger" selected="passenger">Select Passenger</option>
+        </select>
+        <br>
         <label for="seatNumber">Seat Number</label><br>
         <input type="text" id="seatNumber" name="seatNumber"><br>
         <input type="submit" value="Submit">
