@@ -52,6 +52,12 @@ app.get('/carriers', function(req, res)
 app.get('/flights', function(req, res)
 {
         res.sendFile(__dirname + '/public/flights.html')
+})
+
+// Routes passengers on flights
+app.get('/passengersOnFlights', function(req, res)
+{
+        res.sendFile(__dirname + '/public/passengersOnFlights.html')        
 
 });
 
