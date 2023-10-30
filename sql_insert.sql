@@ -22,7 +22,7 @@ select * FROM flights;
 --
 -- INSERT INTO Carriers
 INSERT INTO carriers(carrierName, carrierCountry, carrierFleet, carrierID)
-VALUES (:carrierNameInput, :carrierCountryInput, :carrierFleetInputer, carrierIDInput)
+VALUES (:carrierNameInput, :carrierCountryInput, :carrierFleetInput, carrierIDInput)
 --
 -- INSERT INTO Passengers
 INSERT INTO passengers(name, isNoFlyList)
