@@ -20,6 +20,7 @@
         <a href="./carriers">Carriers</a>
         <a href="./passengers">Passengers</a>
         <a href="./flights">Flights</a>
+        <a href="./passengersOnFlights">PassengersOnFlights</a>
 
     </nav>
 
@@ -51,18 +52,20 @@
 
     </table>
     <form>
+        Carrier: <select name="subject" id="subject">
+            <option value="" selected="selected">Select Carrier</option>
+          </select>
+          <br>
         <label for="aircraftNumber">Aircraft Number</label><br>
         <input type="text" id="aircraftNumber" name="aircraftNumber"><br>
-        <label for="aircraftNumber">Type</label><br>
+        <label for="type">Type</label><br>
         <input type="text" id="type" name="type"><br>
-        <label for="aircraftNumber">Operating Hours</label><br>
+        <label for="operatingHours">Operating Hours</label><br>
         <input type="text" id="operatingHours" name="operatingHours"><br>
-        <label for="aircraftNumber">Capacity</label><br>
+        <label for="capacity">Capacity</label><br>
         <input type="text" id="capacity" name="capacity"><br>
-        <label for="aircraftNumber">Manufacturer</label><br>
+        <label for="manufacturer">Manufacturer</label><br>
         <input type="text" id="manufacturer" name="manufacturer"><br>
-        <label for="carrierId">Carrier ID</label><br>
-        <input type="text" id="carrierId" name="carrierId"><br>
         <input type="submit" value="Submit">
     </form>
 </body>

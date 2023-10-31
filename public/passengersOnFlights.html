@@ -13,45 +13,53 @@
 </head>
 
 <body>
-    <h1>Carriers</h1> 
+    <h1>Passengers</h1> 
     <nav>
         <a href= "./index">Home</a>
         <a href= "./aircraft">Aircraft</a>
         <a href="./carriers">Carriers</a>
         <a href="./passengers">Passengers</a>
         <a href="./flights">Flights</a>
-        <a href="./passengersOnFlights">PassengersOnFlights</a>
+        <a href="./passengersOnFlights">Passengers On Flights</a>
 
     </nav>
-
+    
     <table>
-        <caption>Carriers</caption>
+        <caption>Passengers On Flights</caption>
         <tr>
-            <th >Carrier ID</th>
-            <th>Carrier Name</th>
-            <th>Carrier Country</th>
-            <th>Carrier Fleet Number</th>
+            <th>Flight Number</th>
+            <th>Passenger ID</th>
+            <th>Passenger Name</th>
+            <th>Seat Number</th>
+            <th>On No Fly List</th>
             <!-- add a javascript function to add-->
             <th><a href='#'>Add</a></th>
             <th></th>
         </tr>
 
         <tr>
+            <td>NA1358</td>
             <td>1</td>
-            <td>Delta</td>
-            <td>USA</td>
-            <td>29</td>
+            <td>Patrick Star</td>
+            <td>15C</td>
+            <td>No</td>
             <!-- add a javascript function to edit and delete-->
             <td><a href="#">Edit</a></td>
             <td><a href="#">Delete</a></td>
         </tr>
-        
+
     </table>
     <form>
-        <label for="carrierName">Carrier Name</label><br>
-        <input type="text" id="carrierName" name="carrierName"><br>
-        <label for="carrierCountry">Carrier Country</label><br>
-        <input type="text" id="carrierCountry" name="carrierCountry"><br>
+        Flight: <select name="flight" id="flight">
+            <option value="flight" selected="flight">Select Flight</option>
+          </select>
+          <br>
+        Passenger: <select name="passenger" id="passenger">
+        <option value="passenger" selected="passenger">Select Passenger</option>
+        </select>
+        <br>
+        <label for="seatNumber">Seat Number</label><br>
+        <input type="text" id="seatNumber" name="seatNumber"><br>
         <input type="submit" value="Submit">
     </form>
 </body>
