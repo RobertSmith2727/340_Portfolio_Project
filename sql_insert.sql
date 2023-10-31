@@ -15,15 +15,16 @@ select * FROM aircraft;
 -- SELECT all flights
 select * FROM flights;
 
--- SELECT all passengerOnFlights
-select * from passengerOnFlight
+-- SELECT all passengersOnFlights
+select * from passengersOnFlights;
 
 -- SELECT all passenger on specific flight number
---select name FROM passengers 
---JOIN flightNumber WHERE flightNumber = :flightNumberInput
+select flightNumber, passengers.idPassenger, passengers.name, passengerSeatNumber FROM passengersOnFlights
+JOIN passengers on passengersOnFlights.idPassenger = passengers.idPassenger and flightNumber = :flightNumberInput;
 
 -- SELECT all flights with a specific passenger on it
---select flightNumber FROM flights WHERE idPassenger = :idPassengerInput
+select flightNumber, passengers.idPassenger, passengers.name, passengerSeatNumber FROM passengersOnFlights
+JOIN passengers on passengersOnFlights.idPassenger = passengers.idPassenger and passengersOnFlights.idPassenger= 1;
 --
 --
 --
@@ -63,11 +64,11 @@ UPDATE aircraft SET aircraftType = :aircraftTypeInput, aircraftOperatingHours = 
 --UPDATE Flights
 UPDATE flights SET arrivalTime = ;arrivalTimeInput, departureTime = departureTime;departureTimeInput, totalPassengers = :totalPassengersInput, idCarrier = :idCarrierInput, aircraftNumber = :aircraftNumberInput WHERE flightNumber = :flightNumberUpdateInput
 
---UPDATE passenger on passengerOnFlight
-UPDATE passengerOnFlight SET idPassenger = :idPassengerInput WHERE flightNumber = :flightNumberUpdateInput
+--UPDATE passenger on passengersOnFlights
+UPDATE passengersOnFlights SET idPassenger = :idPassengerInput WHERE flightNumber = :flightNumberUpdateInput
 
---UPDATE flight on passengerOnFlight
-UPDATE passengerOnFlight SET flightNumber = :flightNumberInput WHERE idPassenger = :idPassengerInput
+--UPDATE flight on passengersOnFlights
+UPDATE passengersOnFlights SET flightNumber = :flightNumberInput WHERE idPassenger = :idPassengerInput
 --
 --
 --
@@ -89,10 +90,10 @@ DELETE FROM aircraft WHERE aircraftNumber = :aircraftNumberInput
 --DELETE Flights
 DELETE FROM flights WHERE flightNumber = :flightNumberInput
 
---DELETE Flight on PassengerOnFlights
+--DELETE Flight on PassengersOnFlights
 DELETE FROM passengersOnFlights WHERE flightNumber = :flightNumberInput
 
---DELETE Passenger on PassengerOnFlights
+--DELETE Passenger on PassengersOnFlights
 DELETE FROM passengersOnFlights WHERE idPassenger = :idPassengerInput
 -- SELECT all Passengers on flights
 select * FROM passengersOnFlights
