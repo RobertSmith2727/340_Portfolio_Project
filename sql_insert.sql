@@ -44,8 +44,8 @@ INSERT INTO aircraft(aircraftType, aircraftOperatingHours, aircraftCapacity, air
 VALUES (:aircraftTypeInput, :aircraftOperatingHoursInput, :aircraftCapacityInput, :aircraftManufacturerInput)
 --
 -- INSERT INTO Flights
-INSERT INTO flights(arrivalTime, departureTime, totalPassengers, idCarrier, aircraftNumber)
-VALUES (:arrivaleTimeInput, :departureTimeInput, :totalPassengersInput, :idCarrierInput, :aircraftNumberInput)
+INSERT INTO flights(arrivalTime, departureTime, totalPassengers, aircraftNumber)
+VALUES (:arrivaleTimeInput, :departureTimeInput, :totalPassengersInput, :aircraftNumberInput)
 --
 -- ******************************* UPDATE QUERIES ****************************************
 --
@@ -62,7 +62,7 @@ UPDATE passengers SET name = :nameInput, isNoFlyList = : isNoFlyListInput WHERE 
 UPDATE aircraft SET aircraftType = :aircraftTypeInput, aircraftOperatingHours = :aircraftOperatingHoursInput, aircraftCapacity = :aircraftCapacityInput, aircraftManufacturer = :aircraftManufacturerInput, idCarrier = :idCarrierInput, WHERE aircraftNumber = :aircraftNumberUpdateInput
 
 --UPDATE Flights
-UPDATE flights SET arrivalTime = ;arrivalTimeInput, departureTime = departureTime;departureTimeInput, totalPassengers = :totalPassengersInput, idCarrier = :idCarrierInput, aircraftNumber = :aircraftNumberInput WHERE flightNumber = :flightNumberUpdateInput
+UPDATE flights SET arrivalTime = ;arrivalTimeInput, departureTime = departureTime;departureTimeInput, totalPassengers = :totalPassengersInput, aircraftNumber = :aircraftNumberInput WHERE flightNumber = :flightNumberUpdateInput
 
 --UPDATE passenger on passengersOnFlights
 UPDATE passengersOnFlights SET idPassenger = :idPassengerInput WHERE flightNumber = :flightNumberUpdateInput
