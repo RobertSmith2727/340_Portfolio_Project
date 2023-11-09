@@ -1,0 +1,66 @@
+<body>
+    <h1>Passengers</h1> 
+    <nav>
+        <a href= "./index">Home</a>
+        <a href= "./aircraft">Aircraft</a>
+        <a href="./carriers">Carriers</a>
+        <a href="./passengers">Passengers</a>
+        <a href="./flights">Flights</a>
+        <a href="./passengersOnFlights">Passengers On Flights</a>
+
+    </nav>
+    
+    
+
+
+{{!-- Created aircraft table --}}
+    <table id="passengersOnFlights-table">
+
+        {{!-- Header section --}}
+        <thead>
+
+            
+            <tr>
+                {{#each data.[1]}}
+                
+                <th>
+                    {{@key}}
+                </th>
+                {{/each}}
+                <th><button onclick= "document.getElementById('addPassengersOnFlightsDiv').style.display='block'">Add</button></th>
+            </tr>
+        </thead>
+
+        {{!-- Body section --}}
+        <tbody>
+
+            {{#each data}}
+            <tr data-value={{this.idPassenger}}>
+                <td>{{this.flightNumber}}</td>
+                <td>{{this.idPassenger}}</td>
+                <td>{{this.passengerSeatNumber}}</td>
+                <td><a href='#' name='editPassengersOnFlights'>Edit</a></td>
+                <td><button onclick="deletePassengersOnFlights({{this.idPassenger}})">Delete</button></td>
+            </tr>
+            {{/each}}
+            
+        </tbody>
+    </table>
+
+
+    <div id='addPassengersOnFlightsDiv' style='display:none'>
+    <form id='addPassengersOnFlightsForm' action='/addPassengersOnFlightsForm' method='POST'>
+        Flight: <select name="flightNumberInput" id="flightNumberInput">
+            <option value="flightNumberInput" selected="flightNumberInput">Select Flight</option>
+          </select>
+          <br>
+        Passenger: <select name="idPassengerInput" id="idPassengerInput">
+        <option value="idPassengerInput" selected="idPassengerInput">Select Passenger</option>
+        </select>
+        <br>
+        <label for="seatNumberInput">Seat Number</label><br>
+        <input type="text" id="seatNumberInput" name="seatNumberInput"><br>
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+</body>

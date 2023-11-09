@@ -1,13 +1,31 @@
 // App.js
 
 /*
-    SETUP
+    SETUP- from exploration
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 4000;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 5309;                 // Set a port number at the top so it's easy to change in the future
+
+// app.js
+
+// Database- from exploration
+var db = require('./database/db-connector')
+
+// app.js- from exploration
+
+const { engine } = require('express-handlebars');
+var exphbs = require('express-handlebars');     // Import express-handlebars
+app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
+app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
 
 
+
+// app.js - SETUP section- from exploration
+
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+app.use(express.static('public'))
 
 /*
 
@@ -16,50 +34,201 @@ PORT        = 4000;                 // Set a port number at the top so it's easy
 
 
 */
-app.get('/', function(req, res)                 // This is the basic syntax for what is called a 'route'
-    {
-        res.sendFile(__dirname + '/public/index.html')      // This function literally sends the string "The server is running!" to the computer
-    });                                         // requesting the web site.
+
+// app.js
+// app.js
+
+app.get('/', function(req, res)
+    {  
+        res.render('index');         
+    });                                                         // received back from the query
+// app.get('/', function(req, res)
+//     {
+//         res.render('./index');                    // Note the call to render() and not send(). Using render() ensures the templating engine
+//     });                                         // will process this file, before sending the finished HTML to the client.
+
+
 // route index page
 app.get('/index', function(req, res)
-{
-        res.sendFile(__dirname + '/public/index.html')
+    {  
+            res.render('index');                
+    });                                                     
 
-});
 
-// Routes aircraft page
+// Routes aircraft page and loads data from DB
 app.get('/aircraft', function(req, res)
-{
-        res.sendFile(__dirname + '/public/aircraft.html')
-
-});
+{  
+    let query1 = "SELECT * FROM aircraft;";               
+    let query2 = "SELECT * FROM carriers;"
+    db.pool.query(query1, function(error, rows, fields){    // 
+        let aircraft = rows;
+        db.pool.query(query2, (error, rows, fields));
+            let carriers = rows;
+            return res.render('aircraft', {data: aircraft, carriers: carriers});                  
+    })                                                      
+});  
 
 // Routes passenger page
 app.get('/passengers', function(req, res)
-{
-        res.sendFile(__dirname + '/public/passengers.html')
+{  
+    let query1 = "SELECT * FROM passengers;";               
+    
+    db.pool.query(query1, function(error, rows, fields){    // 
+        
+        res.render('passengers', {data: rows});                  
+    })                                                      
+});  
 
-});
+
 
 // Routes carriers
 app.get('/carriers', function(req, res)
 {
-        res.sendFile(__dirname + '/public/carriers.html')
+    let query1 = "SELECT * FROM carriers;";
+
+    db.pool.query(query1, function(error,rows,fields){
+        res.render('./carriers', {data: rows});
+    })
+        
 
 });
 
 // Routes flights
 app.get('/flights', function(req, res)
-{
-        res.sendFile(__dirname + '/public/flights.html')
+{       
+        let query1 = "SELECT * FROM flights;";
+        db.pool.query(query1, function(error, rows, fields){
+            res.render('./flights', {data: rows});
+        })
+        
 })
 
 // Routes passengers on flights
 app.get('/passengersOnFlights', function(req, res)
 {
-        res.sendFile(__dirname + '/public/passengersOnFlights.html')        
-
+    let query1 = "SELECT * FROM passengersOnFlights;";
+    db.pool.query(query1, function(error, rows, fields){
+        res.render('./passengersOnFlights', {data: rows});
+    })       
 });
+
+
+/*
+POST
+*/
+// app.js
+
+
+// app.js
+
+
+
+// add aircraft post
+
+app.post('/addAircraftForm', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO aircraft(aircraftNumber,aircraftType, aircraftOperatingHours, aircraftCapacity, aircraftManufacturer, idcarrier)
+    VALUES ('${data['aircraftNumberInput']}','${data['aircraftTypeInput']}','${data['operatingHoursInput']}','${data['capacityInput']}','${data['manufacturerInput']}', '${data['carrierInput']}')`;
+    
+    db.pool.query(query1, function(error, rows, fields){
+       
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            res.redirect('/aircraft');
+        }
+    })
+})
+
+
+
+// Add passenger post
+app.post('/addPassengerForm', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
+
+    
+
+    // Create the query and run it on the database
+    query1 = `INSERT INTO passengers(name, isNoFlightList)
+    VALUES ('${data['nameInput']}','${data['isNoFlightListInput']}')`;
+    
+    db.pool.query(query1, function(error, rows, fields){
+       
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal 
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            res.redirect('/passengers');
+        }
+    })
+});
+
+
+// add carriers post
+app.post('/addCarrierForm', function(req,res){
+        let data = req.body;
+
+        query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${data['carrierCountryInput']}', '${data['carrierFleetInput']}')`;
+
+        db.pool.query(query1, function(error, rows, fields){
+        // Check to see if there was an error
+            if (error) {
+
+                // Log the error to the terminal 
+                console.log(error)
+                res.sendStatus(400);
+            }
+
+            else
+            {
+                res.redirect('/carriers');
+            }
+        })
+});
+
+
+
+/*
+Delete Routes
+*/
+
+app.delete('/delete-aircraft-ajax/', function(req,res,next){
+    let data = req.body;
+    let aircraftNumber = parseInt(data.aircraftNumber);
+    let deleteAircraft = `DELETE FROM aircraft WHERE aircraftNumber = ?`;
+    
+  
+  
+          // Run the 1st query
+          db.pool.query(deleteAircraft, [aircraftNumber], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  })});
+
+
 
 
 
