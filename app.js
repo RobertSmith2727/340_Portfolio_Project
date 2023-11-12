@@ -55,16 +55,18 @@ app.get('/index', function(req, res)
     });                                                     
 
 
-// Routes aircraft page and loads data from DB
+// Routes aircraft page and loads data to tables and dropdown
 app.get('/aircraft', function(req, res)
 {  
     let query1 = "SELECT * FROM aircraft;";               
     let query2 = "SELECT * FROM carriers;"
-    db.pool.query(query1, function(error, rows, fields){    // 
-        let aircraft = rows;
-        db.pool.query(query2, (error, rows, fields));
-            let carriers = rows;
-            return res.render('aircraft', {data: aircraft, carriers: carriers});                  
+    db.pool.query(query1, function(error, aircraftRows, fields){    // 
+        let aircraft = aircraftRows;
+        db.pool.query(query2, function(error, carrierRows, fields){
+            let carriershbs = carrierRows;
+        
+            return res.render('aircraft', {data: aircraft, carriershbs: carriershbs}); 
+        });                 
     })                                                      
 });  
 
@@ -103,13 +105,25 @@ app.get('/flights', function(req, res)
         
 })
 
-// Routes passengers on flights
+// Routes passengers on flights + gathers table and  dropdown info
 app.get('/passengersOnFlights', function(req, res)
 {
     let query1 = "SELECT * FROM passengersOnFlights;";
-    db.pool.query(query1, function(error, rows, fields){
-        res.render('./passengersOnFlights', {data: rows});
-    })       
+    let query2 = "SELECT * FROM passengers;"
+    let query3 = "SELECT * FROM flights;"
+    db.pool.query(query1, function(error, PassOnFlightRows, fields){
+        let passengersOnFlights = PassOnFlightRows
+        db.pool.query(query2, function(error, passengersRows, fields){
+            let passengers = passengersRows
+            db.pool.query(query3, function(error, flightsRows, fields){
+                let flights = flightsRows
+                
+                return res.render('passengersOnFlights', {data: passengersOnFlights, passengers: passengers, flights: flights});
+            });
+            
+        });
+        
+    });       
 });
 
 
@@ -205,13 +219,15 @@ app.post('/addCarrierForm', function(req,res){
         })
 });
 
+// TODO: Add passengersOnFlights Post
 
+// TODO: Add flights Post
 
 /*
 Delete Routes
 */
 
-app.delete('/delete-aircraft-ajax/', function(req,res,next){
+app.delete('/delete-aircraft-ajax/', function(req, res, next){
     let data = req.body;
     let aircraftNumber = parseInt(data.aircraftNumber);
     let deleteAircraft = `DELETE FROM aircraft WHERE aircraftNumber = ?`;
