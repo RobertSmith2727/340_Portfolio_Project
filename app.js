@@ -200,24 +200,36 @@ app.post('/addPassengerForm', function(req, res){
 // add carriers post
 app.post('/addCarrierForm', function(req,res){
         let data = req.body;
+        let carrierCountry = String(data.carrierCountryInput)
+        let carrierNameString = String(data.carrierNameInput)
+        
+        if (carrierCountry.length === 0){
+            carrierCountry = 'NULL'
+        }
+        
+        if (carrierNameString.length === 0){
+            console.log("Carrier name must not be empty");
+            
+            res.redirect('/carriers');
+        }
+        
+        else{
+            query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${carrierCountry}', '${data['carrierFleetInput']}')`;
+            db.pool.query(query1, function(error, rows, fields){
+            // Check to see if there was an error
+                if (error) {
 
-        query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${data['carrierCountryInput']}', '${data['carrierFleetInput']}')`;
+                    // Log the error to the terminal 
+                    console.log(error)
+                    res.sendStatus(400);
+                }
 
-        db.pool.query(query1, function(error, rows, fields){
-        // Check to see if there was an error
-            if (error) {
-
-                // Log the error to the terminal 
-                console.log(error)
-                res.sendStatus(400);
-            }
-
-            else
-            {
-                res.redirect('/carriers');
-            }
+                else
+                {
+                    res.redirect('/carriers');
+                }
         })
-});
+}});
 
 // TODO: Add passengersOnFlights Post
 
@@ -229,19 +241,20 @@ Delete Routes
 
 app.delete('/delete-aircraft-ajax/', function(req, res, next){
     let data = req.body;
-    let aircraftNumber = parseInt(data.aircraftNumber);
-    let deleteAircraft = `DELETE FROM aircraft WHERE aircraftNumber = ?`;
-    
-  
-  
+    let aircraftNumber = String(data.id);
+    query1 = `DELETE FROM aircraft WHERE aircraftNumber = '` + String(aircraftNumber)+ "'";
+        
           // Run the 1st query
-          db.pool.query(deleteAircraft, [aircraftNumber], function(error, rows, fields){
+          db.pool.query(query1, function(error, rows, fields){
               if (error) {
   
               // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
               console.log(error);
               res.sendStatus(400);
               }
+              else{
+              res.sendStatus(204);
+              } 
   })});
 
 

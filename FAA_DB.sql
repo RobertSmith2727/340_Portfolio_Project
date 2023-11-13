@@ -47,7 +47,7 @@ CREATE TABLE flights(
     totalPassengers int not null,
     aircraftNumber varchar(30),
     primary key(flightNumber),
-    foreign key(aircraftNumber) references aircraft(aircraftNumber) on delete restrict
+    foreign key(aircraftNumber) references aircraft(aircraftNumber) on delete set NULL
 );
 
 --Creates passengersOnFlights table
