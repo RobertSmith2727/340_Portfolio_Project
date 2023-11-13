@@ -10,7 +10,7 @@ PORT        = 5309;                 // Set a port number at the top so it's easy
 // app.js
 
 // Database- from exploration
-var db = require('./db-connector')
+var db = require('./database/db-connector')
 
 // app.js- from exploration
 

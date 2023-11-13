@@ -1,0 +1,76 @@
+<body>
+    <h1>Aircraft</h1> 
+    <nav>
+        <a href= "./index">Home</a>
+        <a href= "./aircraft">Aircraft</a>
+        <a href="./carriers">Carriers</a>
+        <a href="./passengers">Passengers</a>
+        <a href="./flights">Flights</a>
+        <a href="./passengersOnFlights">PassengersOnFlights</a>
+
+    </nav>
+
+    {{!-- Created aircraft table --}}
+     
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <table id="aircraft-table">
+
+        {{!-- Header section --}}
+        <thead>
+
+            
+            <tr>
+                {{#each data.[1]}}
+                <th>
+                    {{@key}}
+                </th>
+                {{/each}}
+                <th><button onclick= "document.getElementById('addAircraftDiv').style.display='block'">Add</button></th>
+            </tr>
+        </thead>
+
+        {{!-- Body section --}}
+        <tbody>
+
+            {{#each data}}
+            <tr data-value={{this.aircraftNumber}}>
+                <td>{{this.aircraftNumber}}</td>
+                <td>{{this.aircraftType}}</td>
+                <td>{{this.aircraftOperatingHours}}</td>
+                <td>{{this.aircraftCapacity}}</td>
+                <td>{{this.aircraftManufacturer}}</td>
+                <td>{{this.idCarrier}}</td>
+                <td><a href='#' name='editAircraft'>Edit</a></td>
+                <td><button onclick="deleteAircraft('{{this.aircraftNumber}}')">Delete</button></td>
+            </tr>
+            {{/each}}
+            
+        </tbody>
+    </table>
+    <script src="./js/delete_aircraft.js"></script>
+    
+
+
+    <div id='addAircraftDiv' style='display:none'>
+    <form id='addAircraftForm' action='/addAircraftForm' method='POST'>
+        <br>Carrier:<select name="carrierInput" id="carrierInput">
+        <option value="">Select a Carrier</option>
+        {{#each carriershbs}}
+        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
+        {{/each}}
+        </select><br>
+
+        <label for="aircraftNumberInput">Aircraft Number</label><br>
+        <input type="text" id="aircraftNumberInput" name="aircraftNumberInput"><br>
+        <label for="aircraftTypeInput">Type Aircraft</label><br>
+        <input type="text" id="aircraftTypeInput" name="aircraftTypeInput"><br>
+        <label for="operatingHoursInput">Operating Hours</label><br>
+        <input type="text" id="operatingHoursInput" name="operatingHoursInput"><br>
+        <label for="capacityInput">Capacity</label><br>
+        <input type="text" id="capacityInput" name="capacityInput"><br>
+        <label for="manufacturerInput">Manufacturer</label><br>
+        <input type="text" id="manufacturerInput" name="manufacturerInput"><br>
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+</body>
