@@ -255,7 +255,6 @@ app.put('/put-aircraft-ajax', function(req,res,next){
     let manufacturer = String(data.manufacturer);
     let idCarrier = parseInt(data.idCarrier)
 
-    'UPDATE aircraft SET aircraftType = :aircraftTypeInput, aircraftOperatingHours = :aircraftOperatingHoursInput, aircraftCapacity = :aircraftCapacityInput, aircraftManufacturer = :aircraftManufacturerInput, idCarrier = :idCarrierInput, WHERE aircraftNumber = :aircraftNumberUpdateInput'
     let queryUpdateAircraft = "UPDATE aircraft SET aircraftType = '" + aircraftType +"', aircraftOperatingHours = '" + operatingHours +"', aircraftCapacity = '" + capacity +"', aircraftManufacturer = '" + manufacturer +"', idCarrier = '" + idCarrier +"' WHERE aircraftNumber = '"+ String(aircraftNumber) +"'";
     let selectCarrier = `SELECT * FROM bsg_planets WHERE id = ?`
   
@@ -263,7 +262,7 @@ app.put('/put-aircraft-ajax', function(req,res,next){
           db.pool.query(queryUpdateAircraft, function(error, rows, fields){
               if (error) {
   
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              // Log the error to the terminal
               console.log(error);
               res.sendStatus(400);
               }
@@ -273,21 +272,7 @@ app.put('/put-aircraft-ajax', function(req,res,next){
               else {
                 res.redirect('./aircraft');
               }
-              // If there was no error, we run our second query and return that data so we can use it to update the people's
-              // table on the front-end
-            //   else
-            //   {
-            //       // Run the second query
-            //       db.pool.query(selectWorld, [homeworld], function(error, rows, fields) {
-  
-            //           if (error) {
-            //               console.log(error);
-            //               res.sendStatus(400);
-            //           } else {
-            //               res.send(rows);
-            //           }
-            //       })
-            //   }
+            
   })});
 
 
