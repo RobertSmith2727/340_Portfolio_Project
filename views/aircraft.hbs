@@ -30,6 +30,7 @@
         </thead>
 
         {{!-- Body section --}}
+       
         <tbody>
 
             {{#each data}}
@@ -40,7 +41,7 @@
                 <td>{{this.aircraftCapacity}}</td>
                 <td>{{this.aircraftManufacturer}}</td>
                 <td>{{this.idCarrier}}</td>
-                <td><a href='#' name='editAircraft'>Edit</a></td>
+                <td><button onClick= "fillForm('{{this.aircraftNumber}}', '{{this.aircraftType}}', '{{this.aircraftOperatingHours}}','{{this.aircraftCapacity}}', '{{this.aircraftManufacturer}}')">Edit</button></td>
                 <td><button onclick="deleteAircraft('{{this.aircraftNumber}}')">Delete</button></td>
             </tr>
             {{/each}}
@@ -73,4 +74,52 @@
         <input type="submit" value="Submit">
     </form>
     </div>
+
+    {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function fillForm(aircraftNumberUpdate, aircraftTypeUpdate,operatingHoursUpdate, capacityUpdate, manufacturerUpdate, idCarrierUpdate)
+        {
+        document.getElementById("updateAircraftDiv").style = "display:block";
+        document.getElementById("aircraftNumberUpdate").value = aircraftNumberUpdate;
+        document.getElementById("aircraftTypeUpdate").value = aircraftTypeUpdate;
+        document.getElementById("operatingHoursUpdate").value = operatingHoursUpdate;
+        document.getElementById("capacityUpdate").value = capacityUpdate;
+        document.getElementById("manufacturerUpdate").value = manufacturerUpdate;
+        document.getElementById("idCarrierUpdate").value = idCarrierUpdate;
+        };
+    </script>
+    <script>
+        function hideDiv(){
+            document.getElementById("updateAircraftDiv").style = "display:none";
+        }
+    </script>
+
+    <div id='updateAircraftDiv' style="display:none">
+    <br>
+    <legend>Update Aircraft</legend>
+    <br>
+    <form id="update-aircraft-form-ajax">
+        <label for="aircraftNumberUpdate">Aircraft Number</label><br>
+        <input type="text" id="aircraftNumberUpdate" name="aircraftNumberUpdate" value=""><br>
+        <label for="aircraftTypeUpdate">Type Aircraft</label><br>
+        <input type="text" id="aircraftTypeUpdate" name="aircraftTypeUpdate" value=""><br>
+        <label for="operatingHoursUpdate">Operating Hours</label><br>
+        <input type="text" id="operatingHoursUpdate" name="operatingHoursUpdate" value=""><br>
+        <label for="capacityUpdate">Capacity</label><br>
+        <input type="text" id="capacityUpdate" name="capacityUpdate" value=""><br>
+        <label for="manufacturerUpdate">Manufacturer</label><br>
+        <input type="text" id="manufacturerUpdate" name="manufacturerUpdate" value=""><br>
+        Carrier:<select name="idCarrierUpdate" id="idCarrierUpdate">
+        <option value="">Select a Carrier</option>
+        {{#each carriershbs}}
+        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
+        {{/each}}
+        </select><br>
+        <input type="submit" value="Submit" onClick= hideDiv()>
+        
+        </form>
+    </div>
+    <script src="./js/update_aircraft.js"></script>
+
 </body>

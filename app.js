@@ -5,9 +5,10 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 5309;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 5308;                 // Set a port number at the top so it's easy to change in the future
 
 // app.js
+app.use(express.static(__dirname +"/public/"));
 
 // Database- from exploration
 var db = require('./database/db-connector')
@@ -27,16 +28,17 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
+
+
 /*
 
-
-    ROUTES
-
+----------------------------------------PAGE ROUTES--------------------------------------------
 
 */
 
-// app.js
-// app.js
+
+
+
 
 app.get('/', function(req, res)
     {  
@@ -128,14 +130,10 @@ app.get('/passengersOnFlights', function(req, res)
 
 
 /*
-POST
+
+--------------------------------------POST ROUTES----------------------------------------
+
 */
-// app.js
-
-
-// app.js
-
-
 
 // add aircraft post
 
@@ -235,8 +233,67 @@ app.post('/addCarrierForm', function(req,res){
 
 // TODO: Add flights Post
 
+
+
+
+
+
 /*
-Delete Routes
+
+------------------------------------UPDATE ROUTES--------------------------------------
+
+*/
+
+// update aircraft 
+app.put('/put-aircraft-ajax', function(req,res,next){
+    let data = req.body;
+  
+    let aircraftNumber = String(data.aircraftNumber);
+    let aircraftType = String(data.aircraftType);
+    let operatingHours= parseInt(data.operatingHours);
+    let capacity = parseInt(data.capacity);
+    let manufacturer = String(data.manufacturer);
+    let idCarrier = parseInt(data.idCarrier)
+
+    'UPDATE aircraft SET aircraftType = :aircraftTypeInput, aircraftOperatingHours = :aircraftOperatingHoursInput, aircraftCapacity = :aircraftCapacityInput, aircraftManufacturer = :aircraftManufacturerInput, idCarrier = :idCarrierInput, WHERE aircraftNumber = :aircraftNumberUpdateInput'
+    let queryUpdateAircraft = "UPDATE aircraft SET aircraftType = '" + aircraftType +"', aircraftOperatingHours = '" + operatingHours +"', aircraftCapacity = '" + capacity +"', aircraftManufacturer = '" + manufacturer +"', idCarrier = '" + idCarrier +"' WHERE aircraftNumber = '"+ String(aircraftNumber) +"'";
+    let selectCarrier = `SELECT * FROM bsg_planets WHERE id = ?`
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateAircraft, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+              if (res.status != 400) {
+                res.send(rows);
+              }
+              else {
+                res.redirect('./aircraft');
+              }
+              // If there was no error, we run our second query and return that data so we can use it to update the people's
+              // table on the front-end
+            //   else
+            //   {
+            //       // Run the second query
+            //       db.pool.query(selectWorld, [homeworld], function(error, rows, fields) {
+  
+            //           if (error) {
+            //               console.log(error);
+            //               res.sendStatus(400);
+            //           } else {
+            //               res.send(rows);
+            //           }
+            //       })
+            //   }
+  })});
+
+
+
+/*
+-------------------------------------Delete Routes--------------------------------------
 */
 
 app.delete('/delete-aircraft-ajax/', function(req, res, next){
