@@ -13,7 +13,7 @@
 
 
 {{!-- Created aircraft table --}}
-    <table id="carriers-table">
+    <table id="carrier-table">
 
         {{!-- Header section --}}
         <thead>
@@ -39,13 +39,14 @@
                 <td>{{this.carrierName}}</td>
                 <td>{{this.carrierCountry}}</td>
                 <td>{{this.carrierFleet}}</td>
-                <td><a href='#' name='editCarriers'>Edit</a></td>
-                <td><button onclick="deleteCarriers({{this.idPassenger}})">Delete</button></td>
+                <td><button onClick= "fillForm('{{this.idCarrier}}', '{{this.carrierName}}', '{{this.carrierCountry}}','{{this.carrierFleet}}')">Edit</button></td>
+                <td><button onclick="deleteCarrier({{this.idCarrier}})">Delete</button></td>
             </tr>
             {{/each}}
             
         </tbody>
     </table>
+    <script src="./js/delete_carrier.js"></script>
 
 
     <div id='addCarrierDiv' style='display:none'>
@@ -55,8 +56,54 @@
         <label for="carrierCountryInput">Carrier Country</label><br>
         <input type="text" id="carrierCountryInput" name="carrierCountryInput"><br>
         <label for="carrierFleetInput">Carrier Fleet</label><br>
-        <input type="number" id="carrierFleetInput" name="carrierFleetInput"><br>
+        <input type="number" min="0" id="carrierFleetInput" name="carrierFleetInput"><br>
         <input type="submit" value="Submit">
     </form>
     </div>
+
+
+
+
+
+    {{!-- update form --}}
+    {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function fillForm(idCarrierUpdate, carrierNameUpdate, carrierCountryUpdate, carrierFleetUpdate)
+        {
+        document.getElementById("updateCarrierDiv").style = "display:block";
+        document.getElementById("idCarrierUpdate").value = idCarrierUpdate;
+        document.getElementById("carrierNameUpdate").value = carrierNameUpdate;
+        document.getElementById("carrierCountryUpdate").value = carrierCountryUpdate;
+        document.getElementById("carrierFleetUpdate").value = carrierFleetUpdate;
+        };
+    </script>
+
+    <script>
+        function hideDiv(){
+            document.getElementById("updateCarrierDiv").style = "display:none";
+        }
+    </script>
+
+    <div id='updateCarrierDiv' style="display:none">
+    
+    <legend>Update Aircraft</legend>
+    
+    <br>
+    <form id="update-carrier-form-ajax">
+        
+        <label for="carrierNameUpdate">Carrier Name</label><br>
+        <input type="text" id="carrierNameUpdate" name="carrierNameUpdate" value=""><br>
+        <label for="carrierCountryUpdate">Carrier Country</label><br>
+        <input type="text" id="carrierCountryUpdate" name="carrierCountryUpdate" value=""><br>
+        <label for="carrierFleetUpdate">Carrier Fleet</label><br>
+        <input type="number" min="0" id="carrierFleetUpdate" name="carrierFleetUpdate" value=""><br>
+        
+        <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
+        <label hidden for="idCarrierUpdate">Carrier ID</label><br>
+        <input type="hidden" id="idCarrierUpdate" name="idCarrierUpdate" value=""><br>
+        
+        </form>
+    </div>
+    <script src="./js/update_carrier.js"></script>
 </body>
