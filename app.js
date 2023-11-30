@@ -235,36 +235,7 @@ app.post('/addCarrierForm', function(req,res){
 }});
 
 // TODO: Add passengersOnFlights Post
-
-// Flights Post
-app.post('/addFlightsForm', function(req,res){
-        let data = req.body;
-        // let aircraftNumber = data.aircraftInput;
-        // let flightNumber = data.flightNumberInput;
-        // let arrivalTime = data.arrivalTimeInput;
-        // let departTime = data.departureTimeInput;
-        // let totalPassengers = data.totalPassengersInput
-
-        query1 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES ('${data['aircraftInput']}', '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
-
-        db.pool.query(query1, function(error, rows, fields){
-            if (error) {
-                // Log the error to the terminal 
-                console.log(error)
-                res.sendStatus(400);
-            }
-            else
-            {
-                res.redirect('/flights');
-            }
-
-        })
-
-});
-
-
-
-
+// TODO: Add flight post
 
 
 /*
