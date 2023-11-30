@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 5308;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 5378;                 // Set a port number at the top so it's easy to change in the future
 
 // app.js
 app.use(express.static(__dirname +"/public/"));
@@ -20,10 +20,7 @@ var exphbs = require('express-handlebars');     // Import express-handlebars
 app.engine('.hbs', engine({extname: ".hbs"}));  // Create an instance of the handlebars engine to process templates
 app.set('view engine', '.hbs');                 // Tell express to use the handlebars engine whenever it encounters a *.hbs file.
 
-
-
 // app.js - SETUP section- from exploration
-
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
@@ -61,7 +58,7 @@ app.get('/index', function(req, res)
 app.get('/aircraft', function(req, res)
 {  
     let query1 = "SELECT * FROM aircraft;";               
-    let query2 = "SELECT * FROM carriers;"
+    let query2 = "SELECT * FROM carriers;";
     db.pool.query(query1, function(error, aircraftRows, fields){    // 
         let aircraft = aircraftRows;
         db.pool.query(query2, function(error, carrierRows, fields){
@@ -71,6 +68,7 @@ app.get('/aircraft', function(req, res)
         });                 
     })                                                      
 });  
+
 
 // Routes passenger page
 app.get('/passengers', function(req, res)
@@ -101,11 +99,22 @@ app.get('/carriers', function(req, res)
 app.get('/flights', function(req, res)
 {       
         let query1 = "SELECT * FROM flights;";
-        db.pool.query(query1, function(error, rows, fields){
-            res.render('./flights', {data: rows});
-        })
-        
-})
+        let query2 = "SELECT * FROM carriers;";
+        let query3 = "SELECT * FROM aircraft;";      
+        db.pool.query(query1, function(error, flightsRows, fields){
+            let flights = flightsRows;
+            db.pool.query(query2, function(error, carriersRows, fields){
+                let carrierFlights = carriersRows;
+                db.pool.query(query3, function(error, aircraftRows, fields){
+                    let aircraft = aircraftRows;
+                    
+                    return res.render('flights', {data: flights, carrierFlights: carrierFlights, aircraft: aircraft});
+                });
+            
+            });
+            
+        });       
+    });
 
 // Routes passengers on flights + gathers table and  dropdown info
 app.get('/passengersOnFlights', function(req, res)
@@ -114,11 +123,11 @@ app.get('/passengersOnFlights', function(req, res)
     let query2 = "SELECT * FROM passengers;"
     let query3 = "SELECT * FROM flights;"
     db.pool.query(query1, function(error, PassOnFlightRows, fields){
-        let passengersOnFlights = PassOnFlightRows
+        let passengersOnFlights = PassOnFlightRows;
         db.pool.query(query2, function(error, passengersRows, fields){
-            let passengers = passengersRows
+            let passengers = passengersRows;
             db.pool.query(query3, function(error, flightsRows, fields){
-                let flights = flightsRows
+                let flights = flightsRows;
                 
                 return res.render('passengersOnFlights', {data: passengersOnFlights, passengers: passengers, flights: flights});
             });
@@ -171,8 +180,6 @@ app.post('/addPassengerForm', function(req, res){
     // Capture the incoming data and parse it back to a JS object
     let data = req.body;
 
-    
-
     // Create the query and run it on the database
     query1 = `INSERT INTO passengers(name, isNoFlightList)
     VALUES ('${data['nameInput']}','${data['isNoFlightListInput']}')`;
@@ -204,7 +211,7 @@ app.post('/addCarrierForm', function(req,res){
         if (carrierCountry.length === 0){
             carrierCountry = 'NULL'
         }
-        
+        //TODO add alert
         if (carrierNameString.length === 0){
             console.log("Carrier name must not be empty");
             
@@ -212,16 +219,14 @@ app.post('/addCarrierForm', function(req,res){
         }
         
         else{
-            query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${carrierCountry}', '${data['carrierFleetInput']}')`;
+            query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${data['carrierCountry']}', '${data['carrierFleetInput']}')`;
             db.pool.query(query1, function(error, rows, fields){
             // Check to see if there was an error
                 if (error) {
-
                     // Log the error to the terminal 
                     console.log(error)
                     res.sendStatus(400);
                 }
-
                 else
                 {
                     res.redirect('/carriers');
@@ -231,7 +236,31 @@ app.post('/addCarrierForm', function(req,res){
 
 // TODO: Add passengersOnFlights Post
 
-// TODO: Add flights Post
+// Flights Post
+app.post('/addFlightsForm', function(req,res){
+        let data = req.body;
+        // let aircraftNumber = data.aircraftInput;
+        // let flightNumber = data.flightNumberInput;
+        // let arrivalTime = data.arrivalTimeInput;
+        // let departTime = data.departureTimeInput;
+        // let totalPassengers = data.totalPassengersInput
+
+        query1 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES ('${data['aircraftInput']}', '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
+
+        db.pool.query(query1, function(error, rows, fields){
+            if (error) {
+                // Log the error to the terminal 
+                console.log(error)
+                res.sendStatus(400);
+            }
+            else
+            {
+                res.redirect('/flights');
+            }
+
+        })
+
+});
 
 
 
@@ -240,7 +269,7 @@ app.post('/addCarrierForm', function(req,res){
 
 /*
 
-------------------------------------UPDATE ROUTES--------------------------------------
+----------------------------------UPDATE ROUTES------------------------------------
 
 */
 
@@ -255,8 +284,9 @@ app.put('/put-aircraft-ajax', function(req,res,next){
     let manufacturer = String(data.manufacturer);
     let idCarrier = parseInt(data.idCarrier)
 
+    
     let queryUpdateAircraft = "UPDATE aircraft SET aircraftType = '" + aircraftType +"', aircraftOperatingHours = '" + operatingHours +"', aircraftCapacity = '" + capacity +"', aircraftManufacturer = '" + manufacturer +"', idCarrier = '" + idCarrier +"' WHERE aircraftNumber = '"+ String(aircraftNumber) +"'";
-    let selectCarrier = `SELECT * FROM bsg_planets WHERE id = ?`
+    
   
           // Run the 1st query
           db.pool.query(queryUpdateAircraft, function(error, rows, fields){
@@ -266,21 +296,54 @@ app.put('/put-aircraft-ajax', function(req,res,next){
               console.log(error);
               res.sendStatus(400);
               }
+              // if success 
               if (res.status != 400) {
                 res.send(rows);
               }
               else {
-                res.redirect('./aircraft');
+                res.redirect('/aircraft');
               }
-            
+             
   })});
 
+
+  // update carrier 
+app.put('/put-carrier-ajax', function(req,res,next){
+    let data = req.body;
+  
+    let idCarrier = parseInt(data.idCarrier);
+    let carrierName = String(data.carrierName);
+    let carrierCountry = String(data.carrierCountry);
+    let carrierFleet = parseInt(data.carrierFleet);
+    
+
+    let queryUpdateCarrier = "UPDATE carriers SET carrierName = '" + carrierName +"', carrierCountry= '" + carrierCountry +"', carrierFleet= '" + carrierFleet +"' WHERE idCarrier = '"+ idCarrier +"'";
+    
+  
+          // Run the 1st query
+          db.pool.query(queryUpdateCarrier, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal
+              console.log(error);
+              res.sendStatus(400);
+              }
+              // if success 
+              if (res.status != 400) {
+                res.send(rows);
+              }
+              else {
+                res.redirect('/carriers');
+              }
+             
+  })});
 
 
 /*
 -------------------------------------Delete Routes--------------------------------------
 */
 
+// delete Aircraft 
 app.delete('/delete-aircraft-ajax/', function(req, res, next){
     let data = req.body;
     let aircraftNumber = String(data.id);
@@ -300,8 +363,24 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
   })});
 
 
-
-
+  // delete carrier
+  app.delete('/delete-Carrier-ajax/', function(req, res, next){
+    let data = req.body;
+    let idCarrier = String(data.id);
+    query1 = `DELETE FROM carriers WHERE idCarrier = '` + String(idCarrier)+ "'";
+        
+          // Run the 1st query
+          db.pool.query(query1, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+              else{
+              res.sendStatus(204);
+              } 
+  })});
 
 
 /*

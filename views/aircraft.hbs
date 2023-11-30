@@ -13,6 +13,30 @@
     {{!-- Created aircraft table --}}
      
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+    <div id='addAircraftDiv' style='display:none'>
+    <form id='addAircraftForm' action='/addAircraftForm' method='POST'>
+        <br>Carrier:<select name="carrierInput" id="carrierInput" required=''>
+        <option value="">Select a Carrier</option>
+        {{#each carriershbs}}
+        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
+        {{/each}}
+        </select><br>
+
+        <label for="aircraftNumberInput">Aircraft Number</label><br>
+        <input type="text" id="aircraftNumberInput" name="aircraftNumberInput"><br>
+        <label for="aircraftTypeInput">Type Aircraft</label><br>
+        <input type="text" id="aircraftTypeInput" name="aircraftTypeInput"><br>
+        <label for="operatingHoursInput">Operating Hours</label><br>
+        <input type="text" id="operatingHoursInput" name="operatingHoursInput"><br>
+        <label for="capacityInput">Capacity</label><br>
+        <input type="text" id="capacityInput" name="capacityInput"><br>
+        <label for="manufacturerInput">Manufacturer</label><br>
+        <input type="text" id="manufacturerInput" name="manufacturerInput"><br>
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+
     <table id="aircraft-table">
 
         {{!-- Header section --}}
@@ -41,7 +65,7 @@
                 <td>{{this.aircraftCapacity}}</td>
                 <td>{{this.aircraftManufacturer}}</td>
                 <td>{{this.idCarrier}}</td>
-                <td><button onClick= "fillForm('{{this.aircraftNumber}}', '{{this.aircraftType}}', '{{this.aircraftOperatingHours}}','{{this.aircraftCapacity}}', '{{this.aircraftManufacturer}}')">Edit</button></td>
+                <td><button onClick= "fillForm('{{this.aircraftNumber}}', '{{this.aircraftType}}', '{{this.aircraftOperatingHours}}','{{this.aircraftCapacity}}', '{{this.aircraftManufacturer}}','{{this.idCarrier}}')">Edit</button></td>
                 <td><button onclick="deleteAircraft('{{this.aircraftNumber}}')">Delete</button></td>
             </tr>
             {{/each}}
@@ -52,28 +76,7 @@
     
 
 
-    <div id='addAircraftDiv' style='display:none'>
-    <form id='addAircraftForm' action='/addAircraftForm' method='POST'>
-        <br>Carrier:<select name="carrierInput" id="carrierInput">
-        <option value="">Select a Carrier</option>
-        {{#each carriershbs}}
-        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
-        {{/each}}
-        </select><br>
-
-        <label for="aircraftNumberInput">Aircraft Number</label><br>
-        <input type="text" id="aircraftNumberInput" name="aircraftNumberInput"><br>
-        <label for="aircraftTypeInput">Type Aircraft</label><br>
-        <input type="text" id="aircraftTypeInput" name="aircraftTypeInput"><br>
-        <label for="operatingHoursInput">Operating Hours</label><br>
-        <input type="text" id="operatingHoursInput" name="operatingHoursInput"><br>
-        <label for="capacityInput">Capacity</label><br>
-        <input type="text" id="capacityInput" name="capacityInput"><br>
-        <label for="manufacturerInput">Manufacturer</label><br>
-        <input type="text" id="manufacturerInput" name="manufacturerInput"><br>
-        <input type="submit" value="Submit">
-    </form>
-    </div>
+    
 
     {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -87,6 +90,7 @@
         document.getElementById("capacityUpdate").value = capacityUpdate;
         document.getElementById("manufacturerUpdate").value = manufacturerUpdate;
         document.getElementById("idCarrierUpdate").value = idCarrierUpdate;
+        
         };
     </script>
     <script>
@@ -110,13 +114,16 @@
         <input type="text" id="capacityUpdate" name="capacityUpdate" value=""><br>
         <label for="manufacturerUpdate">Manufacturer</label><br>
         <input type="text" id="manufacturerUpdate" name="manufacturerUpdate" value=""><br>
-        Carrier:<select name="idCarrierUpdate" id="idCarrierUpdate">
-        <option value="">Select a Carrier</option>
+        Carrier:
+        <select name="idCarrierUpdate" id="idCarrierUpdate">
+        
+        <option disabled selected hidden value="{{idCarrierUpdate}}">{{carrierNameUpdate}}</option>
         {{#each carriershbs}}
         <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
         {{/each}}
         </select><br>
-        <input type="submit" value="Submit" onClick= hideDiv()>
+        
+        <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
         
         </form>
     </div>
