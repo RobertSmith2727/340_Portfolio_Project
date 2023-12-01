@@ -235,7 +235,53 @@ app.post('/addCarrierForm', function(req,res){
 }});
 
 // TODO: Add passengersOnFlights Post
-// TODO: Add flight post
+
+// Flights Post
+app.post('/addFlightsForm', function(req,res){
+        let data = req.body;
+        // let aircraftNumber = data.aircraftInput;
+        // let flightNumber = data.flightNumberInput;
+        // let arrivalTime = data.arrivalTimeInput;
+        // let departTime = data.departureTimeInput;
+        // let totalPassengers = data.totalPassengersInput
+
+        query1 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES ('${data['aircraftInput']}', '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
+
+        db.pool.query(query1, function(error, rows, fields){
+            if (error) {
+                // Log the error to the terminal 
+                console.log(error)
+                res.sendStatus(400);
+            }
+            else
+            {
+                res.redirect('/flights');
+            }
+
+        })
+
+});
+
+
+app.post('/addPassengersOnFlightsForm', function(req, res){
+    let data = req.body;
+
+    query1 = `INSERT INTO passengersOnFlights(flightNumber, idPassenger, passengerSeatNumber) VALUES ('${data['flightInput']}', '${data['idPassengerInput']}', '${data['seatNumberInput']}')`;
+
+    db.pool.query(query1, function(error, rows, fields){
+        if (error){
+            console.log(error)
+            res.sendStatus(400);
+        }
+        else{
+            res.redirect('/passengersOnFlights');
+        }
+
+    });
+});
+
+
+
 
 
 /*
@@ -328,9 +374,10 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
               console.log(error);
               res.sendStatus(400);
               }
-              else{
-              res.sendStatus(204);
-              } 
+              
+              else {
+                res.redirect('/passengersOnFlights');
+              }
   })});
 
 
@@ -354,6 +401,26 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
   })});
 
 
+    // delete PassOnFlight
+  app.delete('/delete-passengersOnFlights-ajax/', function(req, res, next){
+    let data = req.body;
+    let flightNumber = String(data.flightNumber);
+    let idPassenger = String(data.idPassenger);
+    let query1 = `DELETE FROM passengersOnFlights WHERE flightNumber = '`+ String(flightNumber)+ "' and idPassenger = '" + String(idPassenger)+ "'";
+        db.pool.query(query1, function(error, rows, fields){
+            if(error){
+                console.log(error)
+                res.sendStatus(400);
+
+            }
+            else{
+                res.sendStatus(204);
+            }
+        });
+  });
+   
+
+  
 /*
     LISTENER
 */

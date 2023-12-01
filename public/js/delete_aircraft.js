@@ -15,6 +15,7 @@ function deleteAircraft(aircraftNumber) {
 
             // Add the new data to the table
             deleteAircraftRow(aircraftNumber);
+            window.location.reload();
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 204) {
