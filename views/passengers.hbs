@@ -1,0 +1,99 @@
+<body>
+    <h1>Passengers</h1> 
+    <nav>
+        <a href= "./index">Home</a>
+        <a href= "./aircraft">Aircraft</a>
+        <a href="./carriers">Carriers</a>
+        <a href="./passengers">Passengers</a>
+        <a href="./flights">Flights</a>
+        <a href="./passengersOnFlights">PassengersOnFlights</a>
+
+    </nav>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+{{!-- Created passengers table --}}
+    <table id="passengers-table">
+
+        {{!-- Header section --}}
+        <thead>
+
+            
+            <tr>
+                {{#each data.[1]}}
+                
+                <th>
+                    {{@key}}
+                </th>
+                {{/each}}
+                <th><button onclick= "document.getElementById('addPassengerDiv').style.display='block'">Add</button></th>
+            </tr>
+        </thead>
+
+        {{!-- Body section --}}
+        <tbody>
+
+            {{#each data}}
+            <tr data-value={{this.idPassenger}}>
+                <td>{{this.idPassenger}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.isNoFlightList}}</td>
+                <td><button onClick= "fillForm('{{this.Name}}', '{{this.isNoFlightList}}')">Edit</button></td>
+                <td><button onclick="deletePassengers({{this.idPassenger}})">Delete</button></td>
+            </tr>
+            {{/each}}
+            
+        </tbody>
+    </table>
+    <script src="./js/delete_passengers.js"></script>
+
+    <div id='addPassengerDiv' style='display:none'>
+    <form id='addPassengerForm' action='/addPassengerForm' method='POST'>
+        <label for="nameInput">Passenger Name</label><br>
+        <input type="text" id="nameInput" name="nameInput"><br>
+        <label for="isNoFlightListInput">No Fly List</label><br>
+        <input type="number" id="isNoFlightListInput" name="isNoFlightListInput"><br>
+        <input type="submit" value="Submit">
+    </form>
+    </div>
+
+    {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function fillForm(idPassengerUpdate, PassengerTypeUpdate,operatingHoursUpdate, capacityUpdate, manufacturerUpdate, idCarrierUpdate)
+        {
+        document.getElementById("updatePassengerDiv").style = "display:block";
+        document.getElementById("idPassengerUpdate").value = idPassengerUpdate;
+        document.getElementById("PassengerTypeUpdate").value = isNoFlightListUpdate;
+        document.getElementById("operatingHoursUpdate").value = operatingHoursUpdate;
+        document.getElementById("capacityUpdate").value = capacityUpdate;
+        document.getElementById("manufacturerUpdate").value = manufacturerUpdate;
+        document.getElementById("idCarrierUpdate").value = idCarrierUpdate;
+        
+        };
+    </script>
+    <script>
+        function hideDiv(){
+            document.getElementById("updatePassengerDiv").style = "display:none";
+        }
+    </script>
+
+    <div id='updatePassengerDiv' style="display:none">
+    <br>
+    <legend>Update Passenger</legend>
+    <br>
+    <form id="update-passenger-form-ajax">
+        <label for="PassengerNameUpdate">Passenger Name</label><br>
+        <input type="text" id="PassengerNameUpdate" name="PassengerNameUpdate" value=""><br>
+        <label for="NoFlyListUpdate">No Fly List</label><br>
+        <input type="number" id="NoFlyListUpdate" name="NoFlyListUpdate"><br>
+        
+        </select><br>
+        
+        <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
+        
+        </form>
+    </div>
+    <script src="./js/update_passengers.js"></script>
+    </div>
+</body>
