@@ -234,7 +234,6 @@ app.post('/addCarrierForm', function(req,res){
         })
 }});
 
-// TODO: Add passengersOnFlights Post
 
 // Flights Post
 app.post('/addFlightsForm', function(req,res){
@@ -262,7 +261,7 @@ app.post('/addFlightsForm', function(req,res){
 
 });
 
-
+// add PassengersOnFlights
 app.post('/addPassengersOnFlightsForm', function(req, res){
     let data = req.body;
 
@@ -281,7 +280,31 @@ app.post('/addPassengersOnFlightsForm', function(req, res){
 });
 
 
+// Add passenger post
+app.post('/addPassengerForm', function(req, res){
+    // Capture the incoming data and parse it back to a JS object
+    let data = req.body;
 
+    // Create the query and run it on the database
+    query1 = `INSERT INTO passengers(name, isNoFlightList)
+    VALUES ('${data['nameInput']}','${data['isNoFlightListInput']}')`;
+    
+    db.pool.query(query1, function(error, rows, fields){
+       
+        // Check to see if there was an error
+        if (error) {
+
+            // Log the error to the terminal 
+            console.log(error)
+            res.sendStatus(400);
+        }
+
+        else
+        {
+            res.redirect('/passengers');
+        }
+    })
+});
 
 
 /*
@@ -376,7 +399,7 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
               }
               
               else {
-                res.redirect('/passengersOnFlights');
+                res.sendStatus(204);
               }
   })});
 
@@ -401,7 +424,6 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
   })});
 
 
-    // delete PassOnFlight
   app.delete('/delete-passengersOnFlights-ajax/', function(req, res, next){
     let data = req.body;
     let flightNumber = String(data.flightNumber);
@@ -421,6 +443,48 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
    
 
   
+  // delete passenger
+  app.delete('/delete-passenger-ajax/', function(req,res,next){
+    let data = req.body;
+    let idPassenger = String(data.id);
+    let query1 = `DELETE FROM passengers WHERE idPassenger = '` + String(idPassenger)+ "'";
+  
+  
+          // Run the 1st query
+          db.pool.query(query1, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+              else
+              {
+                res.sendStatus(204)
+              }
+  })});
+
+  // delete flight
+  app.delete('/delete-flight-ajax/', function(req,res,next){
+    let data = req.body;
+    let flightNumber = parseInt(data.id);
+    let query1 = `DELETE FROM flights WHERE flightNumber = ?`;
+  
+  
+          // Run the 1st query
+          db.pool.query(query1, [flightNumber], function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+              console.log(error);
+              res.sendStatus(400);
+              }
+  
+              else
+              {
+                res.sendStatus(204);
+              }
+  })});
 /*
     LISTENER
 */

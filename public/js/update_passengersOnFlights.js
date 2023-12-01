@@ -81,10 +81,6 @@ function updatePassengersOnFlightsRow(data, idPassengerValue, flightValue){
             let td2 = updateRowIndex.getElementsByTagName("td")[2];
             // Reassign seat#
             td2.innerHTML = data.seatNumberValue; 
-
-            
-
-
        }
     }
 }

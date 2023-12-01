@@ -8,7 +8,7 @@ function deleteAircraft(aircraftNumber) {
     var xhttp = new XMLHttpRequest();
     xhttp.open("DELETE", "/delete-aircraft-ajax", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-
+    
     // Tell our AJAX request how to resolve
     xhttp.onreadystatechange = () => {
         if (xhttp.readyState == 4 && xhttp.status == 204) {
@@ -24,6 +24,7 @@ function deleteAircraft(aircraftNumber) {
     }
     // Send the request and wait for the response
     xhttp.send(JSON.stringify(data));
+    console.log(data)
 }
 
 
