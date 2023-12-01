@@ -87,22 +87,22 @@ function updateRow(data, aircraftNumber){
 
             // Get td of aircraft operating Hours
             let td2 = updateRowIndex.getElementsByTagName("td")[2];
-            // Reassign aircraft operating Hours to our value we updated to
+            // Reassign aircraft Type to our value we updated to
             td2.innerHTML = data.operatingHours; 
 
             // Get td of aircraft capacity
             let td3 = updateRowIndex.getElementsByTagName("td")[3];
-            // Reassign aircraft capacity to our value we updated to
+            // Reassign aircraft Type to our value we updated to
             td3.innerHTML = data.capacity; 
 
             // Get td of aircraft manufacturer
             let td4 = updateRowIndex.getElementsByTagName("td")[4];
-            // Reassign aircraft manufacturer to our value we updated to
+            // Reassign aircraft Type to our value we updated to
             td4.innerHTML = data.manufacturer; 
 
-            // Get td of aircraft idCarrier
+            // Get td of aircraft manufacturer
             let td5 = updateRowIndex.getElementsByTagName("td")[5];
-            // Reassign aircraft idCarrier to our value we updated to
+            // Reassign aircraft Type to our value we updated to
             td5.innerHTML = data.idCarrier;
 
        }

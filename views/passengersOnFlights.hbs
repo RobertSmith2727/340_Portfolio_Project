@@ -1,5 +1,5 @@
 <body>
-    <h1>Passengers</h1> 
+    <h1>Passengers On Flights</h1> 
     <nav>
         <a href= "./index">Home</a>
         <a href= "./aircraft">Aircraft</a>
@@ -22,7 +22,6 @@
             
             <tr>
                 {{#each data.[1]}}
-                
                 <th>
                     {{@key}}
                 </th>
@@ -39,35 +38,84 @@
                 <td>{{this.flightNumber}}</td>
                 <td>{{this.idPassenger}}</td>
                 <td>{{this.passengerSeatNumber}}</td>
-                <td><a href='#' name='editPassengersOnFlights'>Edit</a></td>
-                <td><button onclick="deletePassengersOnFlights({{this.idPassenger}})">Delete</button></td>
+                <td><button onclick="fillForm('{{this.flightNumber}}','{{this.idPassenger}}', '{{this.passengerSeatNumber}}')">Edit</button></td>
+                <td><button onclick="deletePassengersOnFlights('{{this.flightNumber}}','{{this.idPassenger}}')">Delete</button></td>
             </tr>
             {{/each}}
             
         </tbody>
     </table>
+    <script src='./js/delete_passengersOnFlights.js'></script>
 
 
     <div id='addPassengersOnFlightsDiv' style='display:none'>
     <form id='addPassengersOnFlightsForm' action='/addPassengersOnFlightsForm' method='POST'>
         <br>
-        Flight: <select name="flightInput" id="flightInput">
-            <option value="" selected="">Select Flight</option>
+        Flight: <select name="flightInput" id="flightInput" required>
+            <option value="" disabled selected="">Select Flight</option>
             {{#each flights}}
             <option value="{{this.flightNumber}}">{{this.flightNumber}}</option>
             {{/each}}
             </select>
         <br>
-        Passenger: <select name="idPassengerInput" id="idPassengerInput">
-        <option value="" selected="">Select Passenger</option>
+        Passenger: <select name="idPassengerInput" id="idPassengerInput" required>
+        <option value="" disabled selected="">Select Passenger</option>
         {{#each passengers}}
         <option value="{{this.idPassenger}}">{{this.name}}</option>
         {{/each}}
             </select>
         <br>
         <label for="seatNumberInput">Seat Number</label><br>
-        <input type="text" id="seatNumberInput" name="seatNumberInput"><br>
+        <input type="text" id="seatNumberInput" name="seatNumberInput" required><br>
         <input type="submit" value="Submit">
     </form>
     </div>
+
+
+
+    {{!-- update form --}}
+    {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    function fillForm(flightUpdate, idPassengerUpdate, seatNumberUpdate){
+        document.getElementById('updatePaxOnFltDiv').style = 'display:block';
+        document.getElementById('flightUpdate').value = flightUpdate;
+        document.getElementById('idPassengerUpdate').value = idPassengerUpdate;
+        document.getElementById('seatNumberUpdate').value = seatNumberUpdate;
+        console.log(flightUpdate, idPassengerUpdate, seatNumberUpdate)
+    };
+    
+    </script>
+
+
+    <script>
+        function hideDiv(){
+            document.getElementById("updatePaxOnFltDiv").style = "display:none";}
+    </script>
+
+    <div id='updatePaxOnFltDiv' style='display:none'>
+    <legend>Update Passenger On Flight</legend>
+    <form id='updatePassengersOnFlightsForm' action='/updatePassengersOnFlightsForm' method='POST'>
+        <br>
+        Flight: <select name="flightUpdate" id="flightUpdate">
+
+            <option value="{{flightUpdate}}" selected hidden disabled>{{flightUpdate}}</option>
+            {{#each flights}}
+            <option value="{{this.flightNumber}}">{{this.flightNumber}}</option>
+            {{/each}}
+            </select>
+        <br>
+        Passenger: <select name="idPassengerUpdate" id="idPassengerUpdate">
+        <option value="" selected="">Select Passenger</option>
+        {{#each passengers}}
+        <option value="{{this.idPassenger}}">{{this.name}}</option>
+        {{/each}}
+            </select>
+        <br>
+        <label for="seatNumberUpdate">Seat Number</label><br>
+        <input type="text" id="seatNumberUpdate" name="seatNumberUpdate" value=""><br>
+        <button type="submit" value="Submit" onClick='hideDiv()'>Submit</button>
+    </form>
+    </div>
+    <script src='./js/update_passengersOnFlights.js'></script>
 </body>
