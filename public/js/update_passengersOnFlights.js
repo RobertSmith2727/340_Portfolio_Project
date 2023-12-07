@@ -13,10 +13,14 @@ updatePassengersOnFlightsForm.addEventListener("submit", function (e) {
     let seatNumberUpdate = document.getElementById("seatNumberUpdate");
     // Get the values from the form fields
 
-    let idPassengerValue = idPassengerUpdate.value;
+    let idPassengerValue = idPassenger.value;
     let flightValue = flightUpdate.value;
     let seatNumberValue = seatNumberUpdate.value;
-    
+
+    console.log(idPassenger);
+    console.log(flightUpdate);
+    console.log(seatNumberUpdate);
+
 
     // currently the database table for bsg_people does not allow updating values to NULL
     // so we must abort if being bassed NULL for homeworld

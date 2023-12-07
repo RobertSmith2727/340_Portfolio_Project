@@ -1,19 +1,11 @@
 <body>
-    <h1>Flights</h1> 
-    <nav>
-        <a href= "./index">Home</a>
-        <a href= "./aircraft">Aircraft</a>
-        <a href="./carriers">Carriers</a>
-        <a href="./passengers">Passengers</a>
-        <a href="./flights">Flights</a>
-        <a href="./passengersOnFlights">PassengersOnFlights</a>
-
-    </nav>
+ 
+    
 
     
 {{!-- Created aircraft table --}}
     <table id="flights-table">
-
+        <h2>Flights</h2> 
         {{!-- Header section --}}
         <thead>
 
@@ -26,6 +18,7 @@
                 </th>
                 {{/each}}
                 <th><button onclick= "document.getElementById('addFlightsDiv').style.display='block'">Add</button></th>
+                <th></th>
             </tr>
         </thead>
 
@@ -47,15 +40,20 @@
         </tbody>
     </table>
 
-
+    
     <div id='addFlightsDiv' style='display:none'>
     <form id='addFlightsForm' action='/addFlightsForm' method='POST'>
-        Carrier: <select name="subject" id="subject">
-            <option value="" selected="selected">Select Carrier</option>
-          </select>
-          <br>
-        Aircraft: <select name="aircraftInput" id="aircraftInput">
-        <option value="aircraftInput" selected="aircraftInput">Select Aircraft</option>
+        Carrier: 
+        <select name="idCarrierInput" id="idCarrierInput" onChange="getOption()">
+        <option value="" selected disabled>Select a Carrier</option>
+        {{#each carrierFlights}}
+        <option value="{{this.idCarrier}}" >{{this.carrierName}}</option>
+        {{/each}}
+        </select><br>
+        
+        <div id="moreFormDiv" style='display:none'>
+        Aircraft: 
+        <select name="aircraftInput" id="aircraftInput">
         </select>
         <br>
         <label for="flightNumberInput">Flight Number</label><br>
@@ -64,9 +62,69 @@
         <input type="datetime-local" id="arrivalTimeInput" name="arrivalTimeInput"><br>
         <label for="departureTimeInput">Departure Time</label><br>
         <input type="datetime-local" id="departureTimeInput" name="departureTimeInput"><br>
-        <label for="totalPassengersInput">Departure Time</label><br>
-        <input type="number" id="totalPassengersInput" name="totalPassengersInput"><br>
+        <label for="totalPassengersInput">Total Passengers</label><br>
+        <input type="number" min='0' id="totalPassengersInput" name="totalPassengersInput"><br>
         <input type="submit" value="Submit">
     </form>
     </div>
+    </div>
+
+    {{!-- Dynamically Updates aircraft dropdown --}}
+    <script type="text/javascript">
+        function getOption() {
+            // gets carrier selected input
+            var idInput = document.getElementById("idCarrierInput").value;
+            var idCarrierArray = []
+            var aircraftNums = []
+
+            // makes array of all aircraft
+            {{#each aircraft}}
+                    idCarrierArray.push({{idCarrier}})
+                    aircraftNums.push("{{aircraftNumber}}")
+            {{/each}}
+
+            //selects aircraft that match idInput
+            var results = [];
+                for ( i=0; i < idCarrierArray.length; i++ ){
+                    if ( idCarrierArray[i] == idInput ){
+                        results.push(aircraftNums[i]);
+                    }
+                }
+
+            // removes all previous aircraft options
+            // sourced from https://stackoverflow.com/questions/3364493/how-do-i-clear-all-options-in-a-dropdown-box
+
+            function removeOptions(selectElement) {
+                var i, L = selectElement.options.length - 1;
+                for(i = L; i >= 0; i--) {
+                    selectElement.remove(i);
+                }}
+
+                removeOptions(document.getElementById('aircraftInput'));
+            
+            // adds aircraft option for each aircraft associated with carrier
+            // sourced from https://stackoverflow.com/questions/9895082/javascript-populate-drop-down-list-with-array
+            var aircraftSelect = document.getElementById("aircraftInput");
+            if (results.length > 0){
+            for ( i=0; i < results.length; i++ ){    
+                var aircrafts = results[i];
+                var element = document.createElement("option");
+                element.textContent = aircrafts;
+                element.value = aircrafts;
+                aircraftSelect.appendChild(element);
+                
+            }}
+            // otherwise no aircraft option
+            else{
+            var aircraftSelect = document.getElementById("aircraftInput");
+            var element = document.createElement("option");
+            element.textContent = "No aircraft associated with selected carrier. Please try another carrier";
+            element.value = "Null";
+            aircraftSelect.appendChild(element);
+            }
+
+            document.getElementById("moreFormDiv").style = "display:block";
+        }
+    </script>
+
 </body>

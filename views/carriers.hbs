@@ -1,14 +1,6 @@
 <body>
-    <h1>Carriers</h1> 
-    <nav>
-        <a href= "./index">Home</a>
-        <a href= "./aircraft">Aircraft</a>
-        <a href="./carriers">Carriers</a>
-        <a href="./passengers">Passengers</a>
-        <a href="./flights">Flights</a>
-        <a href="./passengersOnFlights">PassengersOnFlights</a>
 
-    </nav>
+    
 
 
 
@@ -27,12 +19,13 @@
                 </th>
                 {{/each}}
                 <th><button onclick= "document.getElementById('addCarrierDiv').style.display='block'">Add</button></th>
+                <th></th>
             </tr>
         </thead>
 
         {{!-- Body section --}}
         <tbody>
-
+            <h2>Carriers</h2> 
             {{#each data}}
             <tr data-value={{this.idCarrier}}>
                 <td>{{this.idCarrier}}</td>

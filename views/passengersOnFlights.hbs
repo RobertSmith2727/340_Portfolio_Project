@@ -1,21 +1,12 @@
 <body>
-    <h1>Passengers On Flights</h1> 
-    <nav>
-        <a href= "./index">Home</a>
-        <a href= "./aircraft">Aircraft</a>
-        <a href="./carriers">Carriers</a>
-        <a href="./passengers">Passengers</a>
-        <a href="./flights">Flights</a>
-        <a href="./passengersOnFlights">Passengers On Flights</a>
-
-    </nav>
-    
+     
+ 
     
 
 
 {{!-- Created aircraft table --}}
     <table id="passengersOnFlights-table">
-
+        <h2>Passengers On Flights</h2>
         {{!-- Header section --}}
         <thead>
 
@@ -27,6 +18,7 @@
                 </th>
                 {{/each}}
                 <th><button onclick= "document.getElementById('addPassengersOnFlightsDiv').style.display='block'">Add</button></th>
+                <th></th>
             </tr>
         </thead>
 
@@ -95,7 +87,7 @@
 
     <div id='updatePaxOnFltDiv' style='display:none'>
     <legend>Update Passenger On Flight</legend>
-    <form id='updatePassengersOnFlightsForm' action='/updatePassengersOnFlightsForm' method='POST'>
+    <form id='update-PassengersOnFlights-form-ajax' action='/update-PassengersOnFlights-form-ajax' method='POST'>
         <br>
         Flight: <select name="flightUpdate" id="flightUpdate">
 
