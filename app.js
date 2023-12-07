@@ -374,14 +374,17 @@ app.put('/put-carrier-ajax', function(req,res,next){
 
 
   // Update PassengersOnFlights
-app.put('/put-passengersOnFlights-ajax', function(res,req, next){
+app.put('/put-passengersOnFlights-ajax', function(req,res, next){
         data = req.body;
-
+        
         let idPassengerValue = parseInt(data.idPassenger);
         let flightValue = String(data.flightNumber);
         let seatNumberValue = String(data.seatNumber);
+        let origFlightNumber = String(data.origFlightNumber)
+        let origIdPassenger = parseInt(data.origIdPassenger)
+        
 
-        query1 = "UPDATE passengersOnFlights SET idPassenger = '" + idPassengerValue +"', flightNumber = '" + flightValue + "', passengerSeatNumber = '" + seatNumberValue + "'" + `WHERE flightNumber = '${data['flightUpdate']}' and idPassenger = '${data['idPassengerUpdate']}')`;
+        query1 = "UPDATE passengersOnFlights SET idPassenger = '" + idPassengerValue +"', flightNumber = '" + flightValue + "', passengerSeatNumber = '" + seatNumberValue + "' " + "WHERE flightNumber = '" + origFlightNumber + "' and idPassenger = '"+ origIdPassenger + "'";
         
         db.pool.query(query1, function(error, rows, fields){
             if(error){

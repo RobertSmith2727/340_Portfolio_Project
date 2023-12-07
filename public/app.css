@@ -85,19 +85,42 @@ tbody tr:nth-child(odd) {
 }
 
 tbody tr:nth-child(even) {
-  background-color: white;
+  background-color: gainsboro;
 }
 
 
 
 /*  ----- Form ----- */
-form {}
+
+form{width: 93%;
+  padding: 20px;
+  margin: 20px;
+  margin-right: 20px;
+  display: inline-block;
+  border: 2px solid #ccc;
+  
+  border-radius: 4px;
+}
 fieldset {}
-  legend {}
-label {}
-button {}
-input {}
-select {}
+legend {padding: 0px 20px 3px 20px; font-size: 23px;}
+label {padding: 5px;
+  margin-top: 30px;
+    }
+button, #button{text-decoration: none;
+    display: inline;
+  width: fit-content;}
+input {display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  padding: 8px;
+  font-size: 15px;
+  }
+select {display: flex;
+  flex-wrap: wrap;
+  width: 97%;
+  padding: 8px;
+  font-size: 15px;
+  }
   optgroup {}
   option {}
 textarea {}
