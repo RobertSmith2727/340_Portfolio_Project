@@ -1,0 +1,106 @@
+
+
+  body {
+  background-color: white;  
+  font-family: 'Times New Roman', Times, serif;
+  color: #192857;
+  margin: 5px;
+  padding: 5px;
+  
+}
+
+/*  ----- Page layout blocks -----  */
+header {color: black;
+margin-bottom: 200px;}
+h1{padding-top: 30px;}
+/* #FAA_Logo{block-size: 10px;} */
+main {}
+section {}
+article {}
+  #topic1 {}
+  #topic2 {}
+div {}
+aside {}
+footer {}
+
+
+
+/*  ------------------------ Navigation ----- ------------------  */
+nav {}
+nav a {display: inline-block;
+  padding: 15px;
+  background-color: #18639F;
+  color: aliceblue;
+  
+  padding: 10px;
+  border-top-left-radius:15px;
+  border-bottom-left-radius:15px;
+  border-top-right-radius:15px;
+  border-bottom-right-radius:15px;}
+nav a:hover {color:black;
+  background-color: #AEAEAE;
+  border-top-left-radius:15px;
+  border-bottom-left-radius:15px;
+  border-top-right-radius:15px;
+  border-bottom-right-radius:15px;}
+
+a{text-decoration: none;}
+
+
+
+
+img{padding: 15px;
+  
+}
+
+/* -------------------Table ---------------- */
+table{padding: 20px;
+margin: 20px;
+width: 97%;
+}
+
+h2{text-align: left;
+margin: 20px;
+font-size: 40px}
+
+table, th, td {
+  border-collapse: collapse;
+  
+}
+
+th{
+  padding: 10px;
+  font-size: larger;
+  background-color: #18639F;
+  color: white;
+  text-align:left;
+}
+td {
+  padding: 7px;
+  text-align:left;
+  
+}
+tbody tr:nth-child(odd) {
+  background-color: #AEAEAE;
+}
+
+tbody tr:nth-child(even) {
+  background-color: white;
+}
+
+
+
+/*  ----- Form ----- */
+form {}
+fieldset {}
+  legend {}
+label {}
+button {}
+input {}
+select {}
+  optgroup {}
+  option {}
+textarea {}
+output {}
+meter {}
+progress {}
