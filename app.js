@@ -5,7 +5,7 @@
 */
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-PORT        = 5654;                 // Set a port number at the top so it's easy to change in the future
+PORT        = 5653;                 // Set a port number at the top so it's easy to change in the future
 
 // app.js
 app.use(express.static(__dirname +"/public/"));
@@ -201,18 +201,8 @@ app.post('/addPassengerForm', function(req, res){
 // add carriers post
 app.post('/addCarrierForm', function(req,res){
         let data = req.body;
-        let carrierCountry = String(data.carrierCountryInput)
-        let carrierNameString = String(data.carrierNameInput)
         
-        
-        //TODO add alert
-        if (carrierNameString.length === 0){
-            console.log("Carrier name must not be empty");
-            
-            res.redirect('/carriers');
-        }
-        
-        else{
+     
             query1 = `INSERT INTO carriers(carrierName, carrierCountry, carrierFleet) VALUES ('${data['carrierNameInput']}', '${data['carrierCountryInput']}', '${data['carrierFleetInput']}')`;
             db.pool.query(query1, function(error, rows, fields){
             // Check to see if there was an error
@@ -226,15 +216,23 @@ app.post('/addCarrierForm', function(req,res){
                     res.redirect('/carriers');
                 }
         })
-}});
+});
 
 
 // Flights Post
 app.post('/addFlightsForm', function(req,res){
         let data = req.body;
+        let aircraftNumberValue = String(`${data['aircraftInput']}`)
         
 
         query1 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES ('${data['aircraftInput']}', '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
+
+        query2 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES (${data['aircraftInput']}, '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
+
+        // Allows Null FK
+        if (aircraftNumberValue === 'NULL'){
+            query1 = query2;
+        }
 
         db.pool.query(query1, function(error, rows, fields){
             if (error) {
@@ -396,7 +394,7 @@ app.put('/put-passengersOnFlights-ajax', function(req,res, next){
         });
 });
 
-// update aircraft 
+// update flight 
 app.put('/put-flight-ajax', function(req,res,next){
     let data = req.body;
     let flightNumber = String(data.flightNumber);
@@ -408,6 +406,9 @@ app.put('/put-flight-ajax', function(req,res,next){
     
     let query1 = "UPDATE flights SET arrivalTime = '" + arrival +"', departureTime  = '" + departure +"', totalPassengers = '" + totalPassenger +"', aircraftNumber = '" + aircraftNumber +"' WHERE flightNumber = '"+ flightNumber + "'";
     
+    if(aircraftNumber === "NULL"){
+        query1 = "UPDATE flights SET arrivalTime = '" + arrival +"', departureTime  = '" + departure +"', totalPassengers = '" + totalPassenger +"', aircraftNumber = " + aircraftNumber +" WHERE flightNumber = '"+ flightNumber + "'";
+    }
   
           // Run the 1st query
           db.pool.query(query1, function(error, rows, fields){

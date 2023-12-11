@@ -138,7 +138,7 @@
                 
             } var element2 = document.createElement("option");
                 element2.textContent = "Null";
-                element2.value = "Null";
+                element2.value = 'NULL';
                 aircraftSelect.appendChild(element2);
             }
             // otherwise no aircraft option
@@ -146,11 +146,11 @@
             var aircraftSelect = document.getElementById("aircraftInput");
             var element = document.createElement("option");
             element.textContent = "No aircraft associated with selected carrier. Please try another carrier";
-            element.value = "Null";
+            element.value = 'NULL';
             aircraftSelect.appendChild(element);
             var element2 = document.createElement("option");
             element2.textContent = "Null";
-            element2.value = "Null";
+            element2.value = 'NULL';
             aircraftSelect.appendChild(element2);
             }
 
@@ -196,7 +196,7 @@
         {{#each aircraft}}
         <option value="{{this.aircraftNumber}}">{{this.aircraftNumber}}</option>
         {{/each}}
-        <option value="Null">Null</option>
+        <option value="NULL">Null</option>
         </select><br>
         
         <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
