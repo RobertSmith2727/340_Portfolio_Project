@@ -232,11 +232,7 @@ app.post('/addCarrierForm', function(req,res){
 // Flights Post
 app.post('/addFlightsForm', function(req,res){
         let data = req.body;
-        // let aircraftNumber = data.aircraftInput;
-        // let flightNumber = data.flightNumberInput;
-        // let arrivalTime = data.arrivalTimeInput;
-        // let departTime = data.departureTimeInput;
-        // let totalPassengers = data.totalPassengersInput
+        
 
         query1 = `INSERT INTO flights( aircraftNumber, flightNumber, arrivalTime, departureTime, totalPassengers) VALUES ('${data['aircraftInput']}', '${data['flightNumberInput']}','${data['arrivalTimeInput']}','${data['departureTimeInput']}','${data['totalPassengersInput']}')`;
 
@@ -374,14 +370,17 @@ app.put('/put-carrier-ajax', function(req,res,next){
 
 
   // Update PassengersOnFlights
-app.put('/put-passengersOnFlights-ajax', function(res,req, next){
+app.put('/put-passengersOnFlights-ajax', function(req,res, next){
         data = req.body;
-
+        
         let idPassengerValue = parseInt(data.idPassenger);
         let flightValue = String(data.flightNumber);
         let seatNumberValue = String(data.seatNumber);
+        let origFlightNumber = String(data.origFlightNumber)
+        let origIdPassenger = parseInt(data.origIdPassenger)
+        
 
-        query1 = "UPDATE passengersOnFlights SET idPassenger = '" + idPassengerValue +"', flightNumber = '" + flightValue + "', passengerSeatNumber = '" + seatNumberValue + "'" + `WHERE flightNumber = '${data['flightUpdate']}' and idPassenger = '${data['idPassengerUpdate']}')`;
+        query1 = "UPDATE passengersOnFlights SET idPassenger = '" + idPassengerValue +"', flightNumber = '" + flightValue + "', passengerSeatNumber = '" + seatNumberValue + "' " + "WHERE flightNumber = '" + origFlightNumber + "' and idPassenger = '"+ origIdPassenger + "'";
         
         db.pool.query(query1, function(error, rows, fields){
             if(error){
@@ -397,6 +396,67 @@ app.put('/put-passengersOnFlights-ajax', function(res,req, next){
         });
 });
 
+// update aircraft 
+app.put('/put-flight-ajax', function(req,res,next){
+    let data = req.body;
+    let flightNumber = String(data.flightNumber);
+    let arrival = data.arrival;
+    let departure = data.departure;
+    let totalPassenger = parseInt(data.totalPassenger);
+    let aircraftNumber = String(data.aircraftNumber);
+
+    
+    let query1 = "UPDATE flights SET arrivalTime = '" + arrival +"', departureTime  = '" + departure +"', totalPassengers = '" + totalPassenger +"', aircraftNumber = '" + aircraftNumber +"' WHERE flightNumber = '"+ flightNumber + "'";
+    
+  
+          // Run the 1st query
+          db.pool.query(query1, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal
+              console.log(error);
+              res.sendStatus(400);
+              }
+              // if success 
+              if (res.status != 400) {
+                res.send(rows);
+            
+              }
+              else {
+                res.redirect('/flights');
+              }
+             
+  })});
+
+
+      // update passenger 
+app.put('/put-passenger-ajax', function(req,res,next){
+    let data = req.body;
+  
+    let idPassenger = parseInt(data.idPassenger);
+    let passengerName = String(data.passengerName);
+    let isNoFlightList = String(data.isNoFlightList);
+
+    let queryUpdatePassenger = "UPDATE passengers SET name = '" + passengerName +"', isNoFlightList = '" + isNoFlightList +"' WHERE idPassenger = '"+ idPassenger +"'";
+    
+  
+          // Run the 1st query
+          db.pool.query(queryUpdatePassenger, function(error, rows, fields){
+              if (error) {
+  
+              // Log the error to the terminal
+              console.log(error);
+              res.sendStatus(400);
+              }
+              // if success 
+              if (res.status != 400) {
+                res.send(rows);
+              }
+              else {
+                res.redirect('/passengers');
+              }
+             
+  })});
 
 /*
 -------------------------------------Delete Routes--------------------------------------
@@ -483,27 +543,28 @@ app.delete('/delete-aircraft-ajax/', function(req, res, next){
               }
   })});
 
-  // delete flight
-  app.delete('/delete-flight-ajax/', function(req,res,next){
-    let data = req.body;
-    let flightNumber = parseInt(data.id);
-    let query1 = `DELETE FROM flights WHERE flightNumber = ?`;
-  
-  
-          // Run the 1st query
-          db.pool.query(query1, [flightNumber], function(error, rows, fields){
-              if (error) {
-  
-              // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
-              console.log(error);
-              res.sendStatus(400);
-              }
-  
-              else
-              {
-                res.sendStatus(204);
-              }
-  })});
+    // delete flights
+    app.delete('/delete-Flight-ajax/', function(req,res,next){
+        let data = req.body;
+        let flightNumber = String(data.flightNumber);
+        let query1 = `DELETE FROM flights WHERE flightNumber = '` + flightNumber + "'";
+      
+      
+              // Run the 1st query
+              db.pool.query(query1, function(error, rows, fields){
+                  if (error) {
+      
+                  // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
+                  console.log(error);
+                  res.sendStatus(400);
+                  }
+                  else
+                  {
+                    res.sendStatus(204)
+                  }
+      })});
+
+
 /*
     LISTENER
 */

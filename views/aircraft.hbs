@@ -1,42 +1,8 @@
 <body>
-    {{!-- <h1>Aircraft</h1> 
-    <nav>
-        <ul>
-            <a href= "./index">Home</a>
-            <a href= "./aircraft">Aircraft</a>
-            <a href="./carriers">Carriers</a>
-            <a href="./passengers">Passengers</a>
-            <a href="./flights">Flights</a>
-            <a href="./passengersOnFlights">PassengersOnFlights</a>
-        </ul>
-    </nav> --}}
+    
 
     {{!-- Created aircraft table --}}
      
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    
-    <div id='addAircraftDiv' style='display:none'>
-    <form id='addAircraftForm' action='/addAircraftForm' method='POST'>
-        <br>Carrier:<select name="carrierInput" id="carrierInput" required=''>
-        <option value="">Select a Carrier</option>
-        {{#each carriershbs}}
-        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
-        {{/each}}
-        </select><br>
-
-        <label for="aircraftNumberInput">Aircraft Number</label><br>
-        <input type="text" id="aircraftNumberInput" name="aircraftNumberInput"><br>
-        <label for="aircraftTypeInput">Type Aircraft</label><br>
-        <input type="text" id="aircraftTypeInput" name="aircraftTypeInput"><br>
-        <label for="operatingHoursInput">Operating Hours</label><br>
-        <input type="text" id="operatingHoursInput" name="operatingHoursInput"><br>
-        <label for="capacityInput">Capacity</label><br>
-        <input type="text" id="capacityInput" name="capacityInput"><br>
-        <label for="manufacturerInput">Manufacturer</label><br>
-        <input type="text" id="manufacturerInput" name="manufacturerInput"><br>
-        <input type="submit" value="Submit">
-    </form>
-    </div>
     
     <table id="aircraft-table">
     <h2>Aircraft</h2>
@@ -45,11 +11,12 @@
 
             
             <tr>
-                {{#each data.[1]}}
-                <th>
-                    {{@key}}
-                </th>
-                {{/each}}
+                <th>Aircraft Number</th>
+                <th>Type</th>
+                <th>Operating Hours</th>
+                <th>Capacity</th>
+                <th>Manufacturer</th>
+                <th>Carrier ID</th>
                 <th><button onclick= "document.getElementById('addAircraftDiv').style.display='block'">Add</button></th>
                 <th></th>
             </tr>
@@ -68,18 +35,74 @@
                 <td>{{this.aircraftManufacturer}}</td>
                 <td>{{this.idCarrier}}</td>
                 <td><button onClick= "fillForm('{{this.aircraftNumber}}', '{{this.aircraftType}}', '{{this.aircraftOperatingHours}}','{{this.aircraftCapacity}}', '{{this.aircraftManufacturer}}','{{this.idCarrier}}')">Edit</button></td>
-                <td><button onclick="deleteAircraft('{{this.aircraftNumber}}')">Delete</button></td>
+                <td><button onclick="deleteConfirm('{{this.aircraftNumber}}')">Delete</button></td>
             </tr>
             {{/each}}
             
         </tbody>
     </table>
+    
+    {{!-- confirm delete function
+    sourced from https://www.geeksforgeeks.org/javascript-window-confirm-method/ --}}
+    <script>
+        function deleteConfirm(aircraft) {
+            var result = confirm('Are you sure you want to delete Aircraft Number '+ aircraft+'? This will delete all flights associated with this aircraft number.');
+            if (result == true) {
+                deleteAircraft(aircraft);
+            } else {
+                window.location.reload();
+            } 
+        }
+    </script>
     <script src="./js/delete_aircraft.js"></script>
     
 
 
+    {{!-- Add Form --}}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+    <div id='addAircraftDiv' style='display:none'>
+    <legend>Add Aircraft</legend>
+    <form id='addAircraftForm' action='/addAircraftForm' method='POST'>
+        Carrier:<select name="carrierInput" id="carrierInput" required=''>
+        <option value="">Select a Carrier</option>
+        {{#each carriershbs}}
+        <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
+        {{/each}}
+        </select>
+
+        <label for="aircraftNumberInput">Aircraft Number</label>
+        <input required type="text" id="aircraftNumberInput" name="aircraftNumberInput">
+        <label for="aircraftTypeInput">Type Aircraft</label>
+        <input required type="text" id="aircraftTypeInput" name="aircraftTypeInput">
+        <label for="operatingHoursInput">Operating Hours</label>
+        <input type="text" id="operatingHoursInput" name="operatingHoursInput">
+        <label for="capacityInput">Capacity</label>
+        <input required type="text" id="capacityInput" name="capacityInput">
+        <label for="manufacturerInput">Manufacturer</label>
+        <input type="text" id="manufacturerInput" name="manufacturerInput"><br>
+        <button type="submit" value="Submit" onClick="(setNull('manufacturerInput'))">Submit</button>
+        <button type='reset' onClick= hideAddDiv()>Cancel</button>
+    </form>
+    </div>
+    <script>
+        function hideAddDiv(){
+            document.getElementById("addAircraftDiv").style = "display:none";
+        }
+    </script>
+
+
+    {{!-- Sets value null if empty --}}
+    <script>
+    function setNull(manufacturerValue){
+        if (document.getElementById(manufacturerValue).value.length === 0){
+            document.getElementById(manufacturerValue).value = "NULL"
+        }
+    }
+    </script>
     
 
+    {{!-- Update Aircraft --}}
     {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
@@ -95,27 +118,27 @@
         };
     </script>
     
+    {{!-- Hide Div --}}
     <script>
         function hideDiv(){
             document.getElementById("updateAircraftDiv").style = "display:none";
         }
     </script>
 
+    {{!-- Update Form --}}
     <div id='updateAircraftDiv' style="display:none">
-    <br>
     <legend>Update Aircraft</legend>
-    <br>
     <form id="update-aircraft-form-ajax">
-        <label for="aircraftNumberUpdate">Aircraft Number</label><br>
-        <input disabled type="text" id="aircraftNumberUpdate" name="aircraftNumberUpdate" value=""><br>
-        <label for="aircraftTypeUpdate">Type Aircraft</label><br>
-        <input type="text" id="aircraftTypeUpdate" name="aircraftTypeUpdate" value=""><br>
-        <label for="operatingHoursUpdate">Operating Hours</label><br>
-        <input type="text" id="operatingHoursUpdate" name="operatingHoursUpdate" value=""><br>
-        <label for="capacityUpdate">Capacity</label><br>
-        <input type="text" id="capacityUpdate" name="capacityUpdate" value=""><br>
-        <label for="manufacturerUpdate">Manufacturer</label><br>
-        <input type="text" id="manufacturerUpdate" name="manufacturerUpdate" value=""><br>
+        <label for="aircraftNumberUpdate">Aircraft Number</label>
+        <input disabled type="text" id="aircraftNumberUpdate" name="aircraftNumberUpdate" value="">
+        <label for="aircraftTypeUpdate">Type Aircraft</label>
+        <input type="text" id="aircraftTypeUpdate" name="aircraftTypeUpdate" value="">
+        <label for="operatingHoursUpdate">Operating Hours</label>
+        <input type="text" id="operatingHoursUpdate" name="operatingHoursUpdate" value="">
+        <label for="capacityUpdate">Capacity</label>
+        <input type="text" id="capacityUpdate" name="capacityUpdate" value="">
+        <label for="manufacturerUpdate">Manufacturer</label>
+        <input type="text" id="manufacturerUpdate" name="manufacturerUpdate" value="">
         Carrier:
         <select name="idCarrierUpdate" id="idCarrierUpdate">
         
@@ -123,9 +146,10 @@
         {{#each carriershbs}}
         <option value="{{this.idCarrier}}">{{this.carrierName}}</option>
         {{/each}}
-        </select><br>
-        
+        </select>
+        <br>
         <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
+        <button type="reset" onClick= hideDiv()>Cancel</button>
         
         </form>
     </div>

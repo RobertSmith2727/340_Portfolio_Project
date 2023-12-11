@@ -11,32 +11,28 @@ updatePassengersOnFlightsForm.addEventListener("submit", function (e) {
     let idPassenger = document.getElementById("idPassengerUpdate");
     let flightUpdate = document.getElementById("flightUpdate");
     let seatNumberUpdate = document.getElementById("seatNumberUpdate");
+    let idPassengerOrig = document.getElementById("idPassengerValue");
+    let flightUpdateOrig = document.getElementById("flightValue");
+    
+    
     // Get the values from the form fields
 
     let idPassengerValue = idPassenger.value;
     let flightValue = flightUpdate.value;
     let seatNumberValue = seatNumberUpdate.value;
+    let origIdPassengerValue = idPassengerOrig.value;
+    let originalfFlightValue = flightUpdateOrig.value;
 
-    console.log(idPassenger);
-    console.log(flightUpdate);
-    console.log(seatNumberUpdate);
-
-
-    // currently the database table for bsg_people does not allow updating values to NULL
-    // so we must abort if being bassed NULL for homeworld
-
-    // TODO:
-    // if (isNaN(homeworldValue)) 
-    // {
-    //     return;
-    // }
-
+    
 
     // Put our data we want to send in a javascript object
     let data = {
         idPassenger: idPassengerValue,
         flightNumber: flightValue,
         seatNumber: seatNumberValue,
+        origIdPassenger: origIdPassengerValue,
+        origFlightNumber: originalfFlightValue,
+
     }
     
     // Setup our AJAX request
@@ -49,11 +45,13 @@ updatePassengersOnFlightsForm.addEventListener("submit", function (e) {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
 
             // Add the new data to the table
-            updatePassengersOnFlightsRow(data, idPassengerValue, flightValue);
+            updatePassengersOnFlightsRow(data, origIdPassengerValue, originalfFlightValue);
+            window.location.reload();
 
         }
         else if (xhttp.readyState == 4 && xhttp.status != 200) {
-            console.log("There was an error with the input.")
+            console.log("There was an error with the input.");
+            
         }
     }
 

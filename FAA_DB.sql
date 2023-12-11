@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS carriers;
 CREATE TABLE passengers(
     idPassenger int auto_increment unique not null,
     name varchar(175) not null,
-    isNoFlightlist int(1) not null,
+    isNoFlightlist varchar(3) not null,
     primary key (idPassenger)
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE aircraft(
     aircraftManufacturer varchar(150),
     idCarrier int,
     primary key(aircraftNumber),
-    foreign key(idCarrier) references carriers(idCarrier) on delete set null
+    foreign key(idCarrier) references carriers(idCarrier) on delete cascade
 );
 
 --Creates flights table
@@ -47,18 +47,21 @@ CREATE TABLE flights(
     totalPassengers int not null,
     aircraftNumber varchar(30),
     primary key(flightNumber),
-    foreign key(aircraftNumber) references aircraft(aircraftNumber) on delete set NULL
+    foreign key(aircraftNumber) references aircraft(aircraftNumber) on delete cascade
 );
 
 --Creates passengersOnFlights table
 CREATE TABLE passengersOnFlights(
-    flightNumber varchar(30),
+    flightNumber varchar(20),
     idPassenger int,
     passengerSeatNumber varchar(10) not null,
     primary key(flightNumber, idPassenger),
-    foreign key(flightNumber) references flights(flightNumber) on delete restrict,
-    foreign key(idPassenger) references passengers(idPassenger) on delete restrict
+    foreign key(flightNumber) references flights(flightNumber) on delete cascade,
+    foreign key(idPassenger) references passengers(idPassenger) on delete cascade
+    
 );
+
+
 
 
 --################################## Insert Section ##################################
@@ -70,23 +73,23 @@ INSERT INTO passengers(
 VALUES
 (
     'Patrick Star',
-    '0'
+    'No'
 ),
 (
     'Sandy Cheeks',
-    '0'
+    'No'
 ),
 (
     'Dirty Dan',
-    '1'
+    'Yes'
 ),
 (
     'Smitty Werbenjagermanjensen',
-    '0'
+    'No'
 ),
 (
     'Perch Perkins',
-    '0'
+    'No'
 );
 
 -- inserts into carriers

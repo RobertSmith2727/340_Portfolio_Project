@@ -11,12 +11,11 @@
 
             
             <tr>
-                {{#each data.[1]}}
-                
-                <th>
-                    {{@key}}
-                </th>
-                {{/each}}
+                <th>Flight Number</th>
+                <th>Arrival Time</th>
+                <th>Departure Time</th>
+                <th>Total Passengers</th>
+                <th>Aircraft Number</th>
                 <th><button onclick= "document.getElementById('addFlightsDiv').style.display='block'">Add</button></th>
                 <th></th>
             </tr>
@@ -32,17 +31,33 @@
                 <td>{{this.departureTime}}</td>
                 <td>{{this.totalPassengers}}</td>
                 <td>{{this.aircraftNumber}}</td>
-                <td><a href='#' name='editFlights'>Edit</a></td>
-                <td><button onclick="deleteFlights({{this.flightNumber}})">Delete</button></td>
+                <td><button onclick="fillForm('{{this.flightNumber}}','{{this.arrivalTime}}','{{this.departureTime}}','{{this.totalPassengers}}', '{{this.aircraftNumber}}')">Edit</button></td>
+                <td><button onclick= "deleteConfirm('{{this.flightNumber}}')">Delete</button></td>
             </tr>
             {{/each}}
             
         </tbody>
     </table>
+    {{!-- delete warning pop up --}}
+    <script>
+        function deleteConfirm(flightNumber) {
+            var result = confirm('Are you sure you want to delete Flight Number '+ flightNumber+'?');
+            if (result == true) {
+                deleteFlight(flightNumber);
+            } else {
+                window.location.reload();
+            } 
+        }
+    </script>
+    {{!-- delete script --}}
+    <script src="./js/delete_flight.js"></script>
 
-    
+    {{!-- Add Form --}}
     <div id='addFlightsDiv' style='display:none'>
+    <legend>Add Flight</legend>
+    
     <form id='addFlightsForm' action='/addFlightsForm' method='POST'>
+        <button type='reset' onClick= hideAddDiv()>Cancel</button><br>
         Carrier: 
         <select name="idCarrierInput" id="idCarrierInput" onChange="getOption()">
         <option value="" selected disabled>Select a Carrier</option>
@@ -57,17 +72,22 @@
         </select>
         <br>
         <label for="flightNumberInput">Flight Number</label><br>
-        <input type="text" id="flightNumberInput" name="flightNumberInput"><br>
+        <input required type="text" id="flightNumberInput" name="flightNumberInput"><br>
         <label for="arrivalTimeInput">Arrival Time</label><br>
-        <input type="datetime-local" id="arrivalTimeInput" name="arrivalTimeInput"><br>
+        <input required type="datetime-local" id="arrivalTimeInput" name="arrivalTimeInput"><br>
         <label for="departureTimeInput">Departure Time</label><br>
-        <input type="datetime-local" id="departureTimeInput" name="departureTimeInput"><br>
+        <input required type="datetime-local" id="departureTimeInput" name="departureTimeInput"><br>
         <label for="totalPassengersInput">Total Passengers</label><br>
         <input type="number" min='0' id="totalPassengersInput" name="totalPassengersInput"><br>
-        <input type="submit" value="Submit">
+        <input id="button" type="submit" value="Submit">
     </form>
     </div>
     </div>
+    <script>
+        function hideAddDiv(){
+            document.getElementById("addFlightsDiv").style = "display:none";
+        }
+    </script>
 
     {{!-- Dynamically Updates aircraft dropdown --}}
     <script type="text/javascript">
@@ -126,5 +146,59 @@
             document.getElementById("moreFormDiv").style = "display:block";
         }
     </script>
+
+
+
+
+    {{!-- Update form fill --}}
+    {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function fillForm(flightNumberUpdate, arrivalUpdate, depatureUpdate, totalPassengersUpdate, aircraftNumberUpdate)
+        {
+        document.getElementById("updateFlightDiv").style = "display:block";
+        document.getElementById("flightNumberUpdate").value = flightNumberUpdate;
+        document.getElementById("arrivalUpdate").value = arrivalUpdate;
+        document.getElementById("departureUpdate").value = depatureUpdate;
+        document.getElementById("totalPassengersUpdate").value = totalPassengersUpdate;
+        document.getElementById("aircraftNumberUpdate").value = aircraftNumberUpdate;
+        };
+    </script>
+    {{!-- update Form --}}
+    <div id='updateFlightDiv' style="display:none">
+    <legend>Update Flight</legend>
+    <form id="update-flight-form-ajax">
+
+        <label for="flightNumberUpdate">Flight Number</label>
+        <input disabled type="text" id="flightNumberUpdate" name="flightNumberUpdate" value="">
+        <label for="arrivalUpdate">Arrival Time</label>
+        <input type="datetime-local" id="arrivalUpdate" name="arrivalUpdate" value="">
+        <label for="departureUpdate">Departure Time</label>
+        <input type="datetime-local" id="departureUpdate" name="departureUpdate" value="">
+        <label for="totalPassengersUpdate">Total Passengers</label>
+        <input type="number" id="totalPassengersUpdate" name="totalPassengersUpdate" value="">
+
+        Aircraft Number:
+        <select name="aircraftNumberUpdate" id="aircraftNumberUpdate">
+        
+        <option disabled selected hidden value="{{aircraftNumberUpdate}}">{{aircraftNumberUpdate}}</option>
+        {{#each aircraft}}
+        <option value="{{this.aircraftNumber}}">{{this.aircraftNumber}}</option>
+        {{/each}}
+        </select>
+        
+        <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
+        <button type="reset" onClick= hideDiv()>Cancel</button>
+        
+        </form>
+    </div>
+    {{!-- Hide Div --}}
+    <script>
+        function hideDiv(){
+            document.getElementById("updateFlightDiv").style = "display:none";
+        }
+    </script>
+    <script src="./js/update_flights.js"></script>
+    
 
 </body>

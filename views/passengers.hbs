@@ -12,12 +12,9 @@
 
             
             <tr>
-                {{#each data.[1]}}
-                
-                <th>
-                    {{@key}}
-                </th>
-                {{/each}}
+                <th>Passenger ID</th>
+                <th>Name</th>
+                <th>No Fly List</th>
                 <th><button onclick= "document.getElementById('addPassengerDiv').style.display='block'">Add</button></th>
                 <th></th>
             </tr>
@@ -31,23 +28,88 @@
                 <td>{{this.idPassenger}}</td>
                 <td>{{this.name}}</td>
                 <td>{{this.isNoFlightlist}}</td>
-                <td><a href='#' name='editPassengers'>Edit</a></td>
-                <td><button onclick="deletePassengers({{this.idPassenger}})">Delete</button></td>
+                <td><button onClick= "fillForm('{{this.idPassenger}}', '{{this.name}}', 
+                '{{this.isNoFlightlist}}')">Edit</button></td>
+                <td><button onclick="deleteConfirm({{this.idPassenger}})">Delete</button></td>
             </tr>
             {{/each}}
             
         </tbody>
     </table>
+
+    {{!-- delete warning pop up --}}
+    <script>
+        function deleteConfirm(idPassenger) {
+            var result = confirm('Are you sure you want to delete Passenger ID '+ idPassenger + '? This will delete all Passengers On Flights associated with this Passenger ID');
+            if (result == true) {
+                deletePassengers(idPassenger);
+            } else {
+                window.location.reload();
+            } 
+        }
+    </script>
     <script src='./js/delete_passengers.js'></script>
 
 
     <div id='addPassengerDiv' style='display:none'>
+    <legend>Add Passenger</legend>
     <form id='addPassengerForm' action='/addPassengerForm' method='POST'>
-        <label for="nameInput">Passenger Name</label><br>
-        <input type="text" id="nameInput" name="nameInput"><br>
-        <label for="isNoFlightListInput">No Fly List</label><br>
-        <input type="text" id="isNoFlightListInput" name="isNoFlightListInput"><br>
-        <input type="submit" value="Submit">
+        <label for="nameInput">Passenger Name</label>
+        <input required type="text" id="nameInput" name="nameInput">
+        <label for="isNoFlightListInput">No Fly List</label>
+        <select id="isNoFlightListInput" name="isNoFlightListInput" value="">
+            <option value="Yes">Yes</option>
+            <option selected="" value="No">No</option>
+        </select>
+        <button type="submit" value="Submit">Sumbit</button>
+        <button type='reset' onClick=hideAddDiv()>Cancel</button>
     </form>
     </div>
+
+    <script>
+        function hideAddDiv(){
+            document.getElementById("addPassengerDiv").style = "display:none";
+        }
+    </script>
+
+
+     {{!-- script and div for update form Source: https://stackoverflow.com/questions/59703565/fill-a-fields-in-forms-with-button-onclick --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function fillForm(idPassengerUpdate, passengerNameUpdate, isNoFlightListUpdate)
+        {
+        document.getElementById("updatePassengerDiv").style = "display:block";
+        document.getElementById("idPassengerUpdate").value = idPassengerUpdate;
+        document.getElementById("passengerNameUpdate").value = passengerNameUpdate;
+        document.getElementById("isNoFlightListUpdate").value = isNoFlightListUpdate;
+        console.log(idPassengerUpdate, passengerNameUpdate, isNoFlightListUpdate)
+        };
+    </script>
+    
+    <script>
+        function hideDiv(){
+            document.getElementById("updatePassengerDiv").style = "display:none";
+        }
+    </script>
+
+    <div id='updatePassengerDiv' style="display:none">
+    <legend>Update Passenger</legend>
+    <form id="update-passenger-form-ajax">
+        <label for="idPassengerUpdate">Passenger ID</label>
+        <input disabled type="text" id="idPassengerUpdate" name="idPassengerUpdate" value=""><br>
+        <label for="passengerNameUpdate">Passenger Name</label><br>
+        <input type="text" id="passengerNameUpdate" name="passengerNameUpdate" value=""><br>
+        <label for="isNoFlightListUpdate">No Fly List</label><br>
+        
+        <select id="isNoFlightListUpdate" name="isNoFlightListUpdate">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br>
+
+        <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
+        <button type='reset' onClick=hideDiv()>Cancel</button>
+        
+        </form>
+    </div>
+    <script src="./js/update_passengers.js"></script>
 </body>
