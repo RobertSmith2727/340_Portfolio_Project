@@ -79,10 +79,12 @@
         <input required type="datetime-local" id="departureTimeInput" name="departureTimeInput"><br>
         <label for="totalPassengersInput">Total Passengers</label><br>
         <input type="number" min='0' id="totalPassengersInput" name="totalPassengersInput"><br>
-        <input id="button" type="submit" value="Submit">
+        <button type="submit" value="Submit">Submit</button>
     </form>
     </div>
     </div>
+
+    {{!-- hide add div --}}
     <script>
         function hideAddDiv(){
             document.getElementById("addFlightsDiv").style = "display:none";
@@ -133,7 +135,12 @@
                 element.value = aircrafts;
                 aircraftSelect.appendChild(element);
                 
-            }}
+                
+            } var element2 = document.createElement("option");
+                element2.textContent = "Null";
+                element2.value = "Null";
+                aircraftSelect.appendChild(element2);
+            }
             // otherwise no aircraft option
             else{
             var aircraftSelect = document.getElementById("aircraftInput");
@@ -141,6 +148,10 @@
             element.textContent = "No aircraft associated with selected carrier. Please try another carrier";
             element.value = "Null";
             aircraftSelect.appendChild(element);
+            var element2 = document.createElement("option");
+            element2.textContent = "Null";
+            element2.value = "Null";
+            aircraftSelect.appendChild(element2);
             }
 
             document.getElementById("moreFormDiv").style = "display:block";
@@ -185,7 +196,8 @@
         {{#each aircraft}}
         <option value="{{this.aircraftNumber}}">{{this.aircraftNumber}}</option>
         {{/each}}
-        </select>
+        <option value="Null">Null</option>
+        </select><br>
         
         <button type="submit" value="Submit" onClick= hideDiv()>Submit</button>
         <button type="reset" onClick= hideDiv()>Cancel</button>
