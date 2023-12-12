@@ -29,7 +29,7 @@ CREATE TABLE carriers(
 
 --Creates aircraft table
 CREATE TABLE aircraft(
-    aircraftNumber varchar(30) unique not null,
+    aircraftNumber varchar(30) unique,
     aircraftType varchar(150)not null,
     aircraftOperatingHours int not null,
     aircraftCapacity int not null,
@@ -45,7 +45,7 @@ CREATE TABLE flights(
     arrivalTime datetime not null,
     departureTime datetime not null,
     totalPassengers int not null,
-    aircraftNumber varchar(30),
+    aircraftNumber varchar(30) null,
     primary key(flightNumber),
     foreign key(aircraftNumber) references aircraft(aircraftNumber) on delete cascade
 );
@@ -177,6 +177,7 @@ INSERT INTO flights(
     aircraftNumber
 
 )
+
 VALUES
 (
     'DL 1615',
